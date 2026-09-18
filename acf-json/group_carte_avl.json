@@ -1,0 +1,99 @@
+{
+    "key": "group_carte_avl",
+    "title": "Carte Avez-vous lu — Points",
+    "fields": [
+        {
+            "key": "field_avl_points",
+            "label": "Points géographiques",
+            "name": "avl_points",
+            "type": "repeater",
+            "layout": "block",
+            "button_label": "Ajouter un point",
+            "sub_fields": [
+                {
+                    "key": "field_avl_titre",
+                    "label": "Titre",
+                    "name": "titre",
+                    "type": "text",
+                    "required": 1
+                },
+                {
+                    "key": "field_avl_type",
+                    "label": "Type",
+                    "name": "type",
+                    "type": "select",
+                    "choices": {
+                        "auteur": "Auteur·e (épingle)",
+                        "evenement": "Événement partenaire (drapeau)"
+                    },
+                    "default_value": "auteur",
+                    "required": 1
+                },
+                {
+                    "key": "field_avl_edition",
+                    "label": "Édition / année",
+                    "name": "edition",
+                    "type": "select",
+                    "choices": {
+                        "2025": "2025",
+                        "2026": "2026",
+                        "2027": "2027 — À venir",
+                        "2028": "2028 — À venir"
+                    },
+                    "default_value": "2025",
+                    "required": 1
+                },
+                {
+                    "key": "field_avl_x",
+                    "label": "Coordonnée X (%)",
+                    "name": "x",
+                    "type": "number",
+                    "instructions": "Position horizontale en % du cadre (0 = gauche, 100 = droite).",
+                    "min": 0,
+                    "max": 100,
+                    "step": 0.1,
+                    "default_value": 50,
+                    "required": 1
+                },
+                {
+                    "key": "field_avl_y",
+                    "label": "Coordonnée Y (%)",
+                    "name": "y",
+                    "type": "number",
+                    "instructions": "Position verticale en % du cadre (0 = haut, 100 = bas).",
+                    "min": 0,
+                    "max": 100,
+                    "step": 0.1,
+                    "default_value": 50,
+                    "required": 1
+                },
+                {
+                    "key": "field_avl_contenu",
+                    "label": "Contenu du tooltip",
+                    "name": "contenu",
+                    "type": "wysiwyg",
+                    "tabs": "all",
+                    "toolbar": "basic",
+                    "media_upload": 0
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "carte-avl"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0,
+    "modified": 1757280000
+}

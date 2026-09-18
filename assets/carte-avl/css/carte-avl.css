@@ -1,0 +1,315 @@
+/* Carte Avez-vous lu — layered map + pins + tooltip */
+
+.carte-avl {
+	--avl-peach: #f4ddd2;
+	--avl-blue: #1a3a6b;
+	--avl-border: #1a3a6b;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 1rem 0 2rem;
+	font-family: Georgia, "Times New Roman", serif;
+	color: var(--avl-blue);
+}
+
+.carte-avl__scene {
+	position: relative;
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+	background: var(--avl-peach);
+	border: 10px solid transparent;
+	border-image: repeating-linear-gradient(
+			45deg,
+			var(--avl-blue) 0 8px,
+			#fff 8px 16px
+		)
+		10;
+	box-sizing: border-box;
+}
+
+.carte-avl__layers {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+/* SceneLayer-style positioning (Anemoia, without parallax) */
+.carte-avl__layer {
+	position: absolute;
+	left: var(--layer-center-left);
+	top: var(--layer-center-top);
+	transform: translate(-50%, -50%);
+	width: var(--layer-width);
+	height: var(--layer-height);
+	max-width: none;
+	max-height: none;
+	object-fit: cover;
+	opacity: var(--layer-opacity, 1);
+	mix-blend-mode: var(--layer-blend, normal);
+	pointer-events: none;
+	user-select: none;
+}
+
+.carte-avl__missing {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 240px;
+	padding: 2rem;
+	text-align: center;
+}
+
+/* —— Éditions filter (top right) —— */
+.carte-avl__editions {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	z-index: 50;
+	background: rgba(255, 255, 255, 0.92);
+	border: 2px dashed var(--avl-blue);
+	padding: 0.6rem 0.75rem;
+	min-width: 9.5rem;
+	box-shadow: 2px 2px 0 rgba(26, 58, 107, 0.15);
+}
+
+.carte-avl__editions-title {
+	margin: 0 0 0.4rem;
+	font-size: 0.7rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+.carte-avl__editions-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.carte-avl__filter {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	width: 100%;
+	padding: 0.2rem 0.15rem;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	font: inherit;
+	font-size: 0.75rem;
+	color: var(--avl-blue);
+	text-align: left;
+	opacity: 0.55;
+	transition: opacity 0.15s ease;
+}
+
+.carte-avl__filter.is-active,
+.carte-avl__filter:hover {
+	opacity: 1;
+}
+
+.carte-avl__swatch {
+	display: inline-block;
+	width: 1rem;
+	height: 0.85rem;
+	border: 1px solid var(--avl-blue);
+	flex-shrink: 0;
+}
+
+.carte-avl__swatch--all {
+	background: #fff;
+	border-style: dashed;
+}
+
+/* —— Pins —— */
+.carte-avl__pins {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+.carte-avl__pin {
+	position: absolute;
+	transform: translate(-50%, -100%);
+	pointer-events: auto;
+	border: 0;
+	background: transparent;
+	padding: 0;
+	cursor: pointer;
+	line-height: 0;
+	filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.25));
+	transition: transform 0.15s ease;
+	z-index: 2;
+}
+
+.carte-avl__pin:hover,
+.carte-avl__pin[aria-expanded="true"] {
+	transform: translate(-50%, -100%) scale(1.12);
+	z-index: 5;
+}
+
+.carte-avl__pin.is-filtered-out {
+	display: none;
+}
+
+.carte-avl__pin-icon svg,
+.carte-avl__flag-icon svg {
+	display: block;
+}
+
+/* —— Tooltip —— */
+.carte-avl__tooltip {
+	position: absolute;
+	transform: translate(-50%, -110%);
+	z-index: 60;
+	width: min(280px, 70vw);
+	max-height: min(320px, 50vh);
+	overflow: auto;
+	background: #fff;
+	border: 2px dashed var(--avl-blue);
+	padding: 1rem 1.25rem 1rem 1rem;
+	box-shadow: 3px 3px 0 rgba(26, 58, 107, 0.12);
+	pointer-events: auto;
+	text-align: left;
+}
+
+.carte-avl__tooltip[hidden] {
+	display: none !important;
+}
+
+.carte-avl__tooltip-close {
+	position: absolute;
+	top: 0.25rem;
+	right: 0.4rem;
+	border: 0;
+	background: transparent;
+	color: #c0392b;
+	font-size: 1.4rem;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0.15rem 0.35rem;
+}
+
+.carte-avl__tooltip-title {
+	margin: 0 0 0.5rem;
+	padding-right: 1.5rem;
+	font-size: 1.05rem;
+	color: var(--avl-blue);
+	font-weight: 700;
+}
+
+.carte-avl__tooltip-body {
+	font-size: 0.85rem;
+	line-height: 1.45;
+	font-family: system-ui, -apple-system, sans-serif;
+}
+
+.carte-avl__tooltip-body p:last-child {
+	margin-bottom: 0;
+}
+
+/* —— Bottom legend —— */
+.carte-avl__legend {
+	margin-top: 1rem;
+	padding: 0 0.5rem;
+}
+
+.carte-avl__legend-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem 1.75rem;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.9rem;
+}
+
+.carte-avl__legend-list li {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.carte-avl__legend-pin svg,
+.carte-avl__legend-flag svg {
+	display: block;
+}
+
+/* —— Idle animations (subtle) —— */
+@media (prefers-reduced-motion: no-preference) {
+	.carte-avl__layer--canards,
+	.carte-avl__layer--bateau,
+	.carte-avl__layer--baleine {
+		animation: carte-avl-float 4.5s ease-in-out infinite;
+	}
+
+	.carte-avl__layer--puffin {
+		animation: carte-avl-float 5.2s ease-in-out infinite 0.4s;
+	}
+
+	.carte-avl__layer--orignal {
+		animation: carte-avl-float 6s ease-in-out infinite 0.8s;
+	}
+}
+
+@keyframes carte-avl-float {
+	0%,
+	100% {
+		transform: translate(-50%, -50%);
+	}
+	50% {
+		transform: translate(-50%, calc(-50% - 4px));
+	}
+}
+
+/* —— Mobile tooltip —— */
+@media (max-width: 640px) {
+	.carte-avl__editions {
+		top: 0.5rem;
+		right: 0.5rem;
+		padding: 0.4rem 0.5rem;
+		min-width: 7.5rem;
+	}
+
+	.carte-avl__editions-title,
+	.carte-avl__filter {
+		font-size: 0.65rem;
+	}
+
+	.carte-avl__tooltip {
+		position: fixed;
+		left: 50% !important;
+		top: 50% !important;
+		transform: translate(-50%, -50%);
+		width: min(92vw, 340px);
+		max-height: 70vh;
+		z-index: 10000;
+	}
+
+	.carte-avl.is-tooltip-open::after {
+		content: "";
+		position: fixed;
+		inset: 0;
+		background: rgba(26, 58, 107, 0.35);
+		z-index: 9999;
+	}
+}
+
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}

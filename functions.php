@@ -315,3 +315,6 @@ function bidirectional_acf_update_value( $value, $post_id, $field  ) {
 }
 
 add_filter('acf/update_value/name=relations_artistes_realisations', 'bidirectional_acf_update_value', 10, 3);
+
+/* Carte interactive Avez-vous lu (ACF + Elementor) */
+require_once get_stylesheet_directory() . '/inc/carte-avl.php';

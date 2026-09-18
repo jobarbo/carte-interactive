@@ -1,0 +1,302 @@
+{
+  "canvas": {
+    "width": 1920,
+    "height": 1440
+  },
+  "layers": [
+    {
+      "name": "carte-vecto",
+      "file": "carte-vecto.png",
+      "zIndex": 0,
+      "position": {
+        "centerLeft": 49.557291666666664,
+        "centerTop": 51.84027777777778,
+        "width": 100.98958333333334,
+        "height": 104.79166666666666
+      },
+      "blendMode": "normal",
+      "opacity": 1,
+      "clipped": false
+    },
+    {
+      "name": "tree-01",
+      "file": "tree-01.png",
+      "zIndex": 1,
+      "position": {
+        "centerLeft": 11.171875,
+        "centerTop": 52.01388888888889,
+        "width": 2.5520833333333335,
+        "height": 6.805555555555555
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "tree-01-copie",
+      "file": "tree-01-copie.png",
+      "zIndex": 2,
+      "position": {
+        "centerLeft": 27.265625,
+        "centerTop": 44.375,
+        "width": 2.5520833333333335,
+        "height": 6.805555555555555
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "tree-02",
+      "file": "tree-02.png",
+      "zIndex": 3,
+      "position": {
+        "centerLeft": 13.697916666666668,
+        "centerTop": 54.58333333333333,
+        "width": 2.5,
+        "height": 5.138888888888888
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "buffalo",
+      "file": "buffalo.png",
+      "zIndex": 4,
+      "position": {
+        "centerLeft": 23.645833333333332,
+        "centerTop": 89.23611111111111,
+        "width": 4.6875,
+        "height": 3.6111111111111107
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "buffalo-02",
+      "file": "buffalo-02.png",
+      "zIndex": 5,
+      "position": {
+        "centerLeft": 29.635416666666664,
+        "centerTop": 92.43055555555556,
+        "width": 4.6875,
+        "height": 3.6111111111111107
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "bateau",
+      "file": "bateau.png",
+      "zIndex": 6,
+      "position": {
+        "centerLeft": 14.140625000000002,
+        "centerTop": 10.034722222222223,
+        "width": 4.010416666666667,
+        "height": 7.986111111111111
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "house",
+      "file": "house.png",
+      "zIndex": 7,
+      "position": {
+        "centerLeft": 81.58854166666667,
+        "centerTop": 82.25694444444444,
+        "width": 2.7604166666666665,
+        "height": 2.8472222222222223
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "building",
+      "file": "building.png",
+      "zIndex": 8,
+      "position": {
+        "centerLeft": 60.911458333333336,
+        "centerTop": 86.63194444444444,
+        "width": 2.1354166666666665,
+        "height": 6.458333333333334
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "cabin",
+      "file": "cabin.png",
+      "zIndex": 9,
+      "position": {
+        "centerLeft": 25.390625,
+        "centerTop": 46.145833333333336,
+        "width": 4.427083333333334,
+        "height": 3.2638888888888893
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "house-2",
+      "file": "house-2.png",
+      "zIndex": 10,
+      "position": {
+        "centerLeft": 90.65104166666667,
+        "centerTop": 38.75,
+        "width": 7.552083333333333,
+        "height": 4.166666666666666
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "plante",
+      "file": "plante.png",
+      "zIndex": 11,
+      "position": {
+        "centerLeft": 19.322916666666668,
+        "centerTop": 89.27083333333333,
+        "width": 3.854166666666667,
+        "height": 5.208333333333334
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "plante-02",
+      "file": "plante-02.png",
+      "zIndex": 12,
+      "position": {
+        "centerLeft": 35.208333333333336,
+        "centerTop": 91.07638888888889,
+        "width": 3.854166666666667,
+        "height": 5.208333333333334
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "plante-03",
+      "file": "plante-03.png",
+      "zIndex": 13,
+      "position": {
+        "centerLeft": 25.104166666666668,
+        "centerTop": 94.27083333333334,
+        "width": 3.854166666666667,
+        "height": 5.208333333333334
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "phare",
+      "file": "phare.png",
+      "zIndex": 14,
+      "position": {
+        "centerLeft": 90.625,
+        "centerTop": 61.458333333333336,
+        "width": 2.1875,
+        "height": 5.416666666666667
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "silo",
+      "file": "silo.png",
+      "zIndex": 15,
+      "position": {
+        "centerLeft": 34.010416666666664,
+        "centerTop": 81.94444444444444,
+        "width": 4.0625,
+        "height": 5
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "pipeline",
+      "file": "pipeline.png",
+      "zIndex": 16,
+      "position": {
+        "centerLeft": 21.25,
+        "centerTop": 61.076388888888886,
+        "width": 5.104166666666667,
+        "height": 6.458333333333334
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "baleine",
+      "file": "baleine.png",
+      "zIndex": 17,
+      "position": {
+        "centerLeft": 91.22395833333333,
+        "centerTop": 88.81944444444444,
+        "width": 7.656250000000001,
+        "height": 6.25
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "puffin",
+      "file": "puffin.png",
+      "zIndex": 18,
+      "position": {
+        "centerLeft": 78.61979166666667,
+        "centerTop": 22.881944444444443,
+        "width": 5.989583333333334,
+        "height": 5.902777777777778
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "orignal",
+      "file": "orignal.png",
+      "zIndex": 19,
+      "position": {
+        "centerLeft": 75.20833333333333,
+        "centerTop": 71.66666666666667,
+        "width": 4.0625,
+        "height": 5.416666666666667
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "canards",
+      "file": "canards.png",
+      "zIndex": 20,
+      "position": {
+        "centerLeft": 13.098958333333332,
+        "centerTop": 33.36805555555556,
+        "width": 6.09375,
+        "height": 8.958333333333334
+      },
+      "blendMode": "normal",
+      "opacity": 0.7019607843137254,
+      "clipped": false
+    }
+  ]
+}
