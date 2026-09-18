@@ -3,7 +3,6 @@
 .carte-avl {
 	--avl-peach: #f4ddd2;
 	--avl-blue: #1a3a6b;
-	--avl-border: #1a3a6b;
 	width: 100%;
 	max-width: 1200px;
 	margin: 0 auto;
@@ -17,14 +16,7 @@
 	width: 100%;
 	height: auto;
 	overflow: hidden;
-	background: var(--avl-peach);
-	border: 10px solid transparent;
-	border-image: repeating-linear-gradient(
-			45deg,
-			var(--avl-blue) 0 8px,
-			#fff 8px 16px
-		)
-		10;
+	background: transparent;
 	box-sizing: border-box;
 }
 
@@ -166,8 +158,8 @@
 	position: absolute;
 	transform: translate(-50%, -110%);
 	z-index: 60;
-	width: min(280px, 70vw);
-	max-height: min(320px, 50vh);
+	width: min(340px, 78vw);
+	max-height: min(420px, 60vh);
 	overflow: auto;
 	background: #fff;
 	border: 2px dashed var(--avl-blue);
@@ -210,6 +202,66 @@
 
 .carte-avl__tooltip-body p:last-child {
 	margin-bottom: 0;
+}
+
+.carte-avl__tooltip-body img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 0.5rem 0;
+}
+
+.carte-avl__tooltip-body .wp-block-embed,
+.carte-avl__tooltip-body .wp-video,
+.carte-avl__tooltip-body .embed-container,
+.carte-avl__tooltip-body iframe {
+	max-width: 100%;
+}
+
+.carte-avl__tooltip-body iframe {
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	height: auto;
+	min-height: 160px;
+	border: 0;
+}
+
+.carte-avl__tooltip-body .wp-block-embed__wrapper {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+}
+
+.carte-avl__tooltip-body .wp-block-embed__wrapper iframe {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	min-height: 0;
+}
+
+.carte-avl__tooltip-link-wrap {
+	margin: 0.75rem 0 0;
+}
+
+.carte-avl__tooltip-link {
+	display: inline-block;
+	color: var(--avl-blue);
+	font-family: system-ui, -apple-system, sans-serif;
+	font-size: 0.85rem;
+	font-weight: 600;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.carte-avl__tooltip-link:hover,
+.carte-avl__tooltip-link:focus {
+	color: #0d2244;
+}
+
+.carte-avl__legend-pin {
+	display: inline-flex;
+	line-height: 0;
 }
 
 /* —— Bottom legend —— */
@@ -287,7 +339,7 @@
 		left: 50% !important;
 		top: 50% !important;
 		transform: translate(-50%, -50%);
-		width: min(92vw, 340px);
+		width: min(92vw, 360px);
 		max-height: 70vh;
 		z-index: 10000;
 	}

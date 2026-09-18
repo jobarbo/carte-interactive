@@ -5,14 +5,28 @@
   },
   "layers": [
     {
-      "name": "carte-vecto",
-      "file": "carte-vecto.png",
+      "name": "map-sources-psd",
+      "file": "map-sources-psd.png",
       "zIndex": 0,
       "position": {
-        "centerLeft": 49.557291666666664,
-        "centerTop": 51.84027777777778,
-        "width": 100.98958333333334,
-        "height": 104.79166666666666
+        "centerLeft": 50,
+        "centerTop": 50,
+        "width": 100,
+        "height": 100
+      },
+      "blendMode": "normal",
+      "opacity": 1,
+      "clipped": false
+    },
+    {
+      "name": "vagues",
+      "file": "vagues.png",
+      "zIndex": 1,
+      "position": {
+        "centerLeft": 48.515625,
+        "centerTop": 49.270833333333336,
+        "width": 94.32291666666667,
+        "height": 86.45833333333334
       },
       "blendMode": "normal",
       "opacity": 1,
@@ -21,12 +35,12 @@
     {
       "name": "tree-01",
       "file": "tree-01.png",
-      "zIndex": 1,
+      "zIndex": 2,
       "position": {
-        "centerLeft": 11.171875,
-        "centerTop": 52.01388888888889,
-        "width": 2.5520833333333335,
-        "height": 6.805555555555555
+        "centerLeft": 11.197916666666668,
+        "centerTop": 51.979166666666664,
+        "width": 2.604166666666667,
+        "height": 6.875000000000001
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -35,12 +49,12 @@
     {
       "name": "tree-01-copie",
       "file": "tree-01-copie.png",
-      "zIndex": 2,
+      "zIndex": 3,
       "position": {
-        "centerLeft": 27.265625,
-        "centerTop": 44.375,
-        "width": 2.5520833333333335,
-        "height": 6.805555555555555
+        "centerLeft": 27.291666666666664,
+        "centerTop": 44.34027777777778,
+        "width": 2.604166666666667,
+        "height": 6.875000000000001
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -49,12 +63,12 @@
     {
       "name": "tree-02",
       "file": "tree-02.png",
-      "zIndex": 3,
+      "zIndex": 4,
       "position": {
         "centerLeft": 13.697916666666668,
         "centerTop": 54.58333333333333,
         "width": 2.5,
-        "height": 5.138888888888888
+        "height": 5.277777777777778
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -63,12 +77,12 @@
     {
       "name": "buffalo",
       "file": "buffalo.png",
-      "zIndex": 4,
+      "zIndex": 5,
       "position": {
-        "centerLeft": 23.645833333333332,
-        "centerTop": 89.23611111111111,
-        "width": 4.6875,
-        "height": 3.6111111111111107
+        "centerLeft": 23.671875,
+        "centerTop": 89.13194444444444,
+        "width": 5.572916666666667,
+        "height": 5.208333333333334
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -77,12 +91,12 @@
     {
       "name": "buffalo-02",
       "file": "buffalo-02.png",
-      "zIndex": 5,
+      "zIndex": 6,
       "position": {
-        "centerLeft": 29.635416666666664,
-        "centerTop": 92.43055555555556,
-        "width": 4.6875,
-        "height": 3.6111111111111107
+        "centerLeft": 29.661458333333336,
+        "centerTop": 92.32638888888889,
+        "width": 5.572916666666667,
+        "height": 5.208333333333334
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -91,12 +105,12 @@
     {
       "name": "bateau",
       "file": "bateau.png",
-      "zIndex": 6,
+      "zIndex": 7,
       "position": {
-        "centerLeft": 14.140625000000002,
-        "centerTop": 10.034722222222223,
-        "width": 4.010416666666667,
-        "height": 7.986111111111111
+        "centerLeft": 14.114583333333334,
+        "centerTop": 10,
+        "width": 4.0625,
+        "height": 8.055555555555555
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -105,12 +119,12 @@
     {
       "name": "house",
       "file": "house.png",
-      "zIndex": 7,
+      "zIndex": 8,
       "position": {
-        "centerLeft": 81.58854166666667,
-        "centerTop": 82.25694444444444,
-        "width": 2.7604166666666665,
-        "height": 2.8472222222222223
+        "centerLeft": 81.5625,
+        "centerTop": 82.29166666666666,
+        "width": 2.8125,
+        "height": 2.9166666666666665
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -119,12 +133,12 @@
     {
       "name": "building",
       "file": "building.png",
-      "zIndex": 8,
+      "zIndex": 9,
       "position": {
-        "centerLeft": 60.911458333333336,
-        "centerTop": 86.63194444444444,
-        "width": 2.1354166666666665,
-        "height": 6.458333333333334
+        "centerLeft": 60.9375,
+        "centerTop": 86.59722222222223,
+        "width": 2.1875,
+        "height": 6.527777777777779
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -133,12 +147,12 @@
     {
       "name": "cabin",
       "file": "cabin.png",
-      "zIndex": 9,
+      "zIndex": 10,
       "position": {
-        "centerLeft": 25.390625,
-        "centerTop": 46.145833333333336,
-        "width": 4.427083333333334,
-        "height": 3.2638888888888893
+        "centerLeft": 25.416666666666664,
+        "centerTop": 46.111111111111114,
+        "width": 4.479166666666667,
+        "height": 3.3333333333333335
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -147,12 +161,12 @@
     {
       "name": "house-2",
       "file": "house-2.png",
-      "zIndex": 10,
+      "zIndex": 11,
       "position": {
-        "centerLeft": 90.65104166666667,
-        "centerTop": 38.75,
-        "width": 7.552083333333333,
-        "height": 4.166666666666666
+        "centerLeft": 90.625,
+        "centerTop": 38.78472222222222,
+        "width": 7.604166666666666,
+        "height": 4.236111111111112
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -161,7 +175,7 @@
     {
       "name": "plante",
       "file": "plante.png",
-      "zIndex": 11,
+      "zIndex": 12,
       "position": {
         "centerLeft": 19.322916666666668,
         "centerTop": 89.27083333333333,
@@ -175,7 +189,7 @@
     {
       "name": "plante-02",
       "file": "plante-02.png",
-      "zIndex": 12,
+      "zIndex": 13,
       "position": {
         "centerLeft": 35.208333333333336,
         "centerTop": 91.07638888888889,
@@ -189,7 +203,7 @@
     {
       "name": "plante-03",
       "file": "plante-03.png",
-      "zIndex": 13,
+      "zIndex": 14,
       "position": {
         "centerLeft": 25.104166666666668,
         "centerTop": 94.27083333333334,
@@ -203,12 +217,12 @@
     {
       "name": "phare",
       "file": "phare.png",
-      "zIndex": 14,
+      "zIndex": 15,
       "position": {
         "centerLeft": 90.625,
-        "centerTop": 61.458333333333336,
+        "centerTop": 61.49305555555556,
         "width": 2.1875,
-        "height": 5.416666666666667
+        "height": 5.625
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -217,12 +231,12 @@
     {
       "name": "silo",
       "file": "silo.png",
-      "zIndex": 15,
+      "zIndex": 16,
       "position": {
         "centerLeft": 34.010416666666664,
-        "centerTop": 81.94444444444444,
+        "centerTop": 81.90972222222223,
         "width": 4.0625,
-        "height": 5
+        "height": 5.069444444444445
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -231,12 +245,12 @@
     {
       "name": "pipeline",
       "file": "pipeline.png",
-      "zIndex": 16,
+      "zIndex": 17,
       "position": {
-        "centerLeft": 21.25,
-        "centerTop": 61.076388888888886,
-        "width": 5.104166666666667,
-        "height": 6.458333333333334
+        "centerLeft": 19.973958333333332,
+        "centerTop": 61.04166666666667,
+        "width": 7.760416666666667,
+        "height": 6.527777777777779
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -245,12 +259,12 @@
     {
       "name": "baleine",
       "file": "baleine.png",
-      "zIndex": 17,
+      "zIndex": 18,
       "position": {
-        "centerLeft": 91.22395833333333,
-        "centerTop": 88.81944444444444,
-        "width": 7.656250000000001,
-        "height": 6.25
+        "centerLeft": 91.66666666666666,
+        "centerTop": 88.95833333333333,
+        "width": 8.541666666666666,
+        "height": 6.944444444444445
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -259,12 +273,12 @@
     {
       "name": "puffin",
       "file": "puffin.png",
-      "zIndex": 18,
+      "zIndex": 19,
       "position": {
         "centerLeft": 78.61979166666667,
-        "centerTop": 22.881944444444443,
+        "centerTop": 22.916666666666664,
         "width": 5.989583333333334,
-        "height": 5.902777777777778
+        "height": 5.972222222222222
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
@@ -273,7 +287,7 @@
     {
       "name": "orignal",
       "file": "orignal.png",
-      "zIndex": 19,
+      "zIndex": 20,
       "position": {
         "centerLeft": 75.20833333333333,
         "centerTop": 71.66666666666667,
@@ -287,15 +301,29 @@
     {
       "name": "canards",
       "file": "canards.png",
-      "zIndex": 20,
+      "zIndex": 21,
       "position": {
-        "centerLeft": 13.098958333333332,
+        "centerLeft": 13.072916666666668,
         "centerTop": 33.36805555555556,
-        "width": 6.09375,
-        "height": 8.958333333333334
+        "width": 6.145833333333333,
+        "height": 9.097222222222221
       },
       "blendMode": "normal",
       "opacity": 0.7019607843137254,
+      "clipped": false
+    },
+    {
+      "name": "cadre",
+      "file": "cadre.png",
+      "zIndex": 22,
+      "position": {
+        "centerLeft": 49.973958333333336,
+        "centerTop": 50.06944444444444,
+        "width": 100.05208333333333,
+        "height": 100.13888888888889
+      },
+      "blendMode": "normal",
+      "opacity": 1,
       "clipped": false
     }
   ]
