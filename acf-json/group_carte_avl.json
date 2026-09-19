@@ -16,7 +16,12 @@
                     "label": "Titre",
                     "name": "titre",
                     "type": "text",
-                    "required": 1
+                    "required": 1,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    }
                 },
                 {
                     "key": "field_avl_type",
@@ -28,7 +33,12 @@
                         "evenement": "Événement partenaire (drapeau)"
                     },
                     "default_value": "auteur",
-                    "required": 1
+                    "required": 1,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    }
                 },
                 {
                     "key": "field_avl_edition",
@@ -42,31 +52,46 @@
                         "2028": "2028 — À venir"
                     },
                     "default_value": "2025",
-                    "required": 1
+                    "required": 1,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    }
                 },
                 {
                     "key": "field_avl_x",
                     "label": "Coordonnée X (%)",
                     "name": "x",
                     "type": "number",
-                    "instructions": "Position horizontale en % du cadre (0 = gauche, 100 = droite).",
+                    "instructions": "0 = gauche, 100 = droite.",
                     "min": 0,
                     "max": 100,
                     "step": 0.1,
                     "default_value": 50,
-                    "required": 1
+                    "required": 1,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    }
                 },
                 {
                     "key": "field_avl_y",
                     "label": "Coordonnée Y (%)",
                     "name": "y",
                     "type": "number",
-                    "instructions": "Position verticale en % du cadre (0 = haut, 100 = bas).",
+                    "instructions": "0 = haut, 100 = bas.",
                     "min": 0,
                     "max": 100,
                     "step": 0.1,
                     "default_value": 50,
-                    "required": 1
+                    "required": 1,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    }
                 },
                 {
                     "key": "field_avl_contenu",
@@ -76,7 +101,12 @@
                     "tabs": "all",
                     "toolbar": "full",
                     "media_upload": 1,
-                    "instructions": "Texte, images et liens. Pour une vidéo : coller une URL YouTube ou Vimeo sur sa propre ligne."
+                    "instructions": "Texte, images et liens. Pour une vidéo : coller une URL YouTube ou Vimeo sur sa propre ligne.",
+                    "wrapper": {
+                        "width": "100",
+                        "class": "",
+                        "id": ""
+                    }
                 },
                 {
                     "key": "field_avl_lien",
@@ -84,7 +114,12 @@
                     "name": "lien",
                     "type": "url",
                     "instructions": "Optionnel. Affiche un bouton « En savoir plus » dans le tooltip.",
-                    "required": 0
+                    "required": 0,
+                    "wrapper": {
+                        "width": "100",
+                        "class": "",
+                        "id": ""
+                    }
                 }
             ]
         }
@@ -105,5 +140,5 @@
     "instruction_placement": "label",
     "active": true,
     "show_in_rest": 0,
-    "modified": 1758228000
+    "modified": 1758309000
 }
