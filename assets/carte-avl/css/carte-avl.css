@@ -308,6 +308,25 @@
 	.carte-avl__layer--orignal {
 		animation: carte-avl-float 6s ease-in-out infinite 0.8s;
 	}
+
+	/* Staggered swell: each wave drifts + breathes on its own rhythm */
+	[class*="carte-avl__layer--vague-"] {
+		animation: carte-avl-wave 3.6s ease-in-out infinite;
+		will-change: transform, opacity;
+	}
+
+	.carte-avl__layer--vague-1 { animation-delay: 0s; animation-duration: 3.2s; }
+	.carte-avl__layer--vague-2 { animation-delay: 0.35s; animation-duration: 4.1s; }
+	.carte-avl__layer--vague-3 { animation-delay: 0.7s; animation-duration: 3.5s; }
+	.carte-avl__layer--vague-4 { animation-delay: 1.05s; animation-duration: 4.4s; }
+	.carte-avl__layer--vague-5 { animation-delay: 0.2s; animation-duration: 3.8s; }
+	.carte-avl__layer--vague-6 { animation-delay: 1.4s; animation-duration: 3.3s; }
+	.carte-avl__layer--vague-7 { animation-delay: 0.55s; animation-duration: 4.2s; }
+	.carte-avl__layer--vague-8 { animation-delay: 1.75s; animation-duration: 3.7s; }
+	.carte-avl__layer--vague-9 { animation-delay: 0.9s; animation-duration: 4s; }
+	.carte-avl__layer--vague-10 { animation-delay: 1.2s; animation-duration: 3.4s; }
+	.carte-avl__layer--vague-11 { animation-delay: 0.15s; animation-duration: 4.5s; }
+	.carte-avl__layer--vague-12 { animation-delay: 1.55s; animation-duration: 3.9s; }
 }
 
 @keyframes carte-avl-float {
@@ -317,6 +336,26 @@
 	}
 	50% {
 		transform: translate(-50%, calc(-50% - 4px));
+	}
+}
+
+@keyframes carte-avl-wave {
+	0%,
+	100% {
+		transform: translate(-50%, -50%) translate(0, 0) scaleX(1) rotate(0deg);
+		opacity: 0.72;
+	}
+	30% {
+		transform: translate(-50%, -50%) translate(2px, -2px) scaleX(1.08) rotate(-2deg);
+		opacity: 1;
+	}
+	55% {
+		transform: translate(-50%, -50%) translate(-1px, -4px) scaleX(0.96) rotate(1.5deg);
+		opacity: 0.88;
+	}
+	80% {
+		transform: translate(-50%, -50%) translate(1px, -1px) scaleX(1.04) rotate(-1deg);
+		opacity: 1;
 	}
 }
 
