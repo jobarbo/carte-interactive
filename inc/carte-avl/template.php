@@ -1,6 +1,6 @@
 <?php
 /**
- * Front template: layered map + ACF pins + legends + tooltip.
+ * Front template: layered map + CPT pins + legends + tooltip.
  *
  * @package Bootscore_Child
  */
@@ -9,23 +9,29 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-$manifest = carte_avl_get_manifest();
-$points   = function_exists('get_field') ? get_field('avl_points', 'option') : null;
-if (!is_array($points)) {
-	$points = array();
-}
-
+$manifest       = carte_avl_get_manifest();
+$points         = carte_avl_get_points();
+$categories     = carte_avl_get_categories(true);
 $edition_colors = carte_avl_edition_colors();
-$edition_labels = carte_avl_edition_labels();
+$ui             = carte_avl_get_ui_strings();
+$partner_icon   = carte_avl_get_partner_icon_url();
 
-$cw = $manifest ? (int) $manifest['canvas']['width'] : 1920;
-$ch = $manifest ? (int) $manifest['canvas']['height'] : 1440;
+$cw     = $manifest ? (int) $manifest['canvas']['width'] : 1920;
+$ch     = $manifest ? (int) $manifest['canvas']['height'] : 1440;
 $layers = $manifest && isset($manifest['layers']) ? $manifest['layers'] : array();
 $max_z  = 0;
 foreach ($layers as $layer) {
 	$max_z = max($max_z, (int) ($layer['zIndex'] ?? 0));
 }
 $pins_z = $max_z + 10;
+
+$carte_avl_render_partner_flag = static function ($width = 28, $height = 36) {
+	?>
+	<svg viewBox="0 0 24 32" width="<?php echo (int) $width; ?>" height="<?php echo (int) $height; ?>" focusable="false" aria-hidden="true">
+		<path fill="#1a3a6b" d="M4 2v28M4 2h14l-3 5 3 5H4"/>
+	</svg>
+	<?php
+};
 ?>
 <div class="carte-avl" data-carte-avl>
 	<div
@@ -35,18 +41,17 @@ $pins_z = $max_z + 10;
 		<?php if (!empty($layers)) : ?>
 			<div class="carte-avl__layers" aria-hidden="true">
 				<?php foreach ($layers as $layer) :
-					$name     = sanitize_html_class($layer['name'] ?? 'layer');
-					$file     = isset($layer['file']) ? (string) $layer['file'] : '';
-					$pos      = isset($layer['position']) && is_array($layer['position']) ? $layer['position'] : array();
-					$z        = (int) ($layer['zIndex'] ?? 0);
-					$opacity  = isset($layer['opacity']) ? (float) $layer['opacity'] : 1;
-					$blend    = isset($layer['blendMode']) ? (string) $layer['blendMode'] : 'normal';
-					$clipped  = !empty($layer['clipped']);
-					// Skip clipped layers for simplicity (plan).
+					$name    = sanitize_html_class($layer['name'] ?? 'layer');
+					$file    = isset($layer['file']) ? (string) $layer['file'] : '';
+					$pos     = isset($layer['position']) && is_array($layer['position']) ? $layer['position'] : array();
+					$z       = (int) ($layer['zIndex'] ?? 0);
+					$opacity = isset($layer['opacity']) ? (float) $layer['opacity'] : 1;
+					$blend   = isset($layer['blendMode']) ? (string) $layer['blendMode'] : 'normal';
+					$clipped = !empty($layer['clipped']);
 					if ($clipped || $file === '') {
 						continue;
 					}
-					$src = CARTE_AVL_ASSETS_URI . '/layers/' . rawurlencode($file);
+					$src   = CARTE_AVL_ASSETS_URI . '/layers/' . rawurlencode($file);
 					$style = sprintf(
 						'--layer-center-left:%s%%;--layer-center-top:%s%%;--layer-width:%s%%;--layer-height:%s%%;--layer-opacity:%s;--layer-blend:%s;z-index:%d;',
 						esc_attr((string) ($pos['centerLeft'] ?? 50)),
@@ -73,21 +78,19 @@ $pins_z = $max_z + 10;
 			</div>
 		<?php endif; ?>
 
-		<div class="carte-avl__editions" aria-label="Filtrer par édition">
-			<p class="carte-avl__editions-title">Éditions</p>
+		<div class="carte-avl__editions" aria-label="<?php echo esc_attr($ui['filtre_titre']); ?>">
+			<p class="carte-avl__editions-title"><?php echo esc_html($ui['filtre_titre']); ?></p>
 			<ul class="carte-avl__editions-list">
-				<?php foreach ($edition_labels as $key => $label) :
-					$color = $edition_colors[$key] ?? '#ccc';
-					?>
+				<?php foreach ($categories as $cat) : ?>
 					<li>
 						<button
 							type="button"
 							class="carte-avl__filter"
-							data-edition="<?php echo esc_attr($key); ?>"
+							data-edition="<?php echo esc_attr($cat['cle']); ?>"
 							aria-pressed="false"
 						>
-							<span class="carte-avl__swatch" style="background:<?php echo esc_attr($color); ?>;"></span>
-							<span><?php echo esc_html($label); ?></span>
+							<span class="carte-avl__swatch" style="background:<?php echo esc_attr($cat['couleur']); ?>;"></span>
+							<span><?php echo esc_html($cat['libelle']); ?></span>
 						</button>
 					</li>
 				<?php endforeach; ?>
@@ -99,24 +102,24 @@ $pins_z = $max_z + 10;
 						aria-pressed="true"
 					>
 						<span class="carte-avl__swatch carte-avl__swatch--all"></span>
-						<span>Toutes les années</span>
+						<span><?php echo esc_html($ui['filtre_toutes']); ?></span>
 					</button>
 				</li>
 			</ul>
 		</div>
 
 		<div class="carte-avl__pins" style="z-index:<?php echo (int) $pins_z; ?>;">
-			<?php foreach ($points as $index => $point) :
-				$titre   = isset($point['titre']) ? (string) $point['titre'] : '';
-				$type    = isset($point['type']) ? (string) $point['type'] : 'auteur';
-				$edition = isset($point['edition']) ? (string) $point['edition'] : '2025';
-				$x       = isset($point['x']) ? (float) $point['x'] : 50;
-				$y       = isset($point['y']) ? (float) $point['y'] : 50;
-				$contenu = isset($point['contenu']) ? (string) $point['contenu'] : '';
-				$lien    = isset($point['lien']) ? trim((string) $point['lien']) : '';
-				$color   = $edition_colors[$edition] ?? '#F5D76E';
+			<?php foreach ($points as $point) :
+				$titre   = $point['titre'];
+				$type    = $point['type'];
+				$edition = $point['edition'];
+				$x       = $point['x'];
+				$y       = $point['y'];
+				$contenu = $point['contenu'];
+				$lien    = $point['lien'];
+				$color   = $edition_colors[ $edition ] ?? '#F5D76E';
 				$is_flag = ($type === 'evenement');
-				$pin_id  = 'avl-pin-' . (int) $index;
+				$pin_id  = 'avl-pin-' . (int) $point['id'];
 				?>
 				<button
 					type="button"
@@ -129,9 +132,11 @@ $pins_z = $max_z + 10;
 				>
 					<?php if ($is_flag) : ?>
 						<span class="carte-avl__flag-icon" aria-hidden="true">
-							<svg viewBox="0 0 24 32" width="28" height="36" focusable="false">
-								<path fill="#1a3a6b" d="M4 2v28M4 2h14l-3 5 3 5H4"/>
-							</svg>
+							<?php if ($partner_icon !== '') : ?>
+								<img src="<?php echo esc_url($partner_icon); ?>" alt="" width="28" height="36" draggable="false">
+							<?php else : ?>
+								<?php $carte_avl_render_partner_flag(28, 36); ?>
+							<?php endif; ?>
 						</span>
 					<?php else : ?>
 						<span class="carte-avl__pin-icon" aria-hidden="true">
@@ -160,7 +165,7 @@ $pins_z = $max_z + 10;
 					<div class="carte-avl__tooltip-body">
 						<?php
 						if ($contenu !== '') {
-							echo apply_filters('the_content', $contenu); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — WP content filters / oEmbed
+							echo apply_filters('the_content', $contenu); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						}
 						?>
 					</div>
@@ -181,21 +186,23 @@ $pins_z = $max_z + 10;
 
 	<div class="carte-avl__legend" aria-label="Légende">
 		<ul class="carte-avl__legend-list">
-			<?php foreach ($edition_labels as $key => $label) :
-				$color = $edition_colors[$key] ?? '#F5D76E';
-				?>
+			<?php foreach ($categories as $cat) : ?>
 				<li>
-					<span class="carte-avl__legend-pin" style="--pin-color:<?php echo esc_attr($color); ?>;" aria-hidden="true">
+					<span class="carte-avl__legend-pin" style="--pin-color:<?php echo esc_attr($cat['couleur']); ?>;" aria-hidden="true">
 						<svg viewBox="0 0 24 32" width="18" height="24"><path fill="var(--pin-color)" stroke="#1a3a6b" stroke-width="1.2" d="M12 1C6.5 1 2 5.5 2 11c0 7.5 10 19 10 19s10-11.5 10-19C22 5.5 17.5 1 12 1z"/><circle cx="12" cy="11" r="3.5" fill="#fff"/></svg>
 					</span>
-					<span><?php echo esc_html($label); ?></span>
+					<span><?php echo esc_html($cat['libelle']); ?></span>
 				</li>
 			<?php endforeach; ?>
 			<li>
 				<span class="carte-avl__legend-flag" aria-hidden="true">
-					<svg viewBox="0 0 24 32" width="18" height="24"><path fill="#1a3a6b" d="M4 2v28M4 2h14l-3 5 3 5H4"/></svg>
+					<?php if ($partner_icon !== '') : ?>
+						<img src="<?php echo esc_url($partner_icon); ?>" alt="" width="18" height="24" draggable="false">
+					<?php else : ?>
+						<?php $carte_avl_render_partner_flag(18, 24); ?>
+					<?php endif; ?>
 				</span>
-				<span>Événement partenaire</span>
+				<span><?php echo esc_html($ui['legende_partenaire']); ?></span>
 			</li>
 		</ul>
 	</div>

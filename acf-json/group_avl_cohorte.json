@@ -1,0 +1,63 @@
+{
+    "key": "group_avl_cohorte",
+    "title": "Cohorte — affichage",
+    "fields": [
+        {
+            "key": "field_avl_cohorte_couleur",
+            "label": "Couleur",
+            "name": "couleur",
+            "type": "color_picker",
+            "default_value": "#F5D76E",
+            "required": 1,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_cohorte_ordre",
+            "label": "Ordre",
+            "name": "ordre",
+            "type": "number",
+            "instructions": "Ordre dans le filtre et la légende (plus petit = plus haut).",
+            "default_value": 10,
+            "required": 1,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_cohorte_visible",
+            "label": "Visible",
+            "name": "visible",
+            "type": "true_false",
+            "ui": 1,
+            "default_value": 1,
+            "wrapper": {
+                "width": "34",
+                "class": "",
+                "id": ""
+            }
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "avl_cohorte"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0,
+    "modified": 1758310000
+}

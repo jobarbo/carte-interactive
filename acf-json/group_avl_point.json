@@ -1,0 +1,135 @@
+{
+    "key": "group_avl_point",
+    "title": "Point carte",
+    "fields": [
+        {
+            "key": "field_avl_tab_point",
+            "label": "Point / carte",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_avl_point_type",
+            "label": "Type",
+            "name": "type",
+            "type": "select",
+            "choices": {
+                "auteur": "Auteur·e (épingle)",
+                "evenement": "Événement partenaire (drapeau)"
+            },
+            "default_value": "auteur",
+            "required": 1,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_point_cohorte",
+            "label": "Cohorte",
+            "name": "cohorte",
+            "type": "taxonomy",
+            "taxonomy": "avl_cohorte",
+            "field_type": "select",
+            "allow_null": 0,
+            "add_term": 0,
+            "save_terms": 1,
+            "load_terms": 1,
+            "return_format": "id",
+            "multiple": 0,
+            "required": 1,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_point_lien",
+            "label": "Lien « En savoir plus »",
+            "name": "lien",
+            "type": "url",
+            "instructions": "Optionnel. Lien externe affiché dans le tooltip.",
+            "required": 0,
+            "wrapper": {
+                "width": "34",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_point_x",
+            "label": "Coordonnée X (%)",
+            "name": "x",
+            "type": "number",
+            "instructions": "0 = gauche, 100 = droite.",
+            "min": 0,
+            "max": 100,
+            "step": 0.1,
+            "default_value": 50,
+            "required": 1,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_point_y",
+            "label": "Coordonnée Y (%)",
+            "name": "y",
+            "type": "number",
+            "instructions": "0 = haut, 100 = bas.",
+            "min": 0,
+            "max": 100,
+            "step": 0.1,
+            "default_value": 50,
+            "required": 1,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_tab_contenu",
+            "label": "Contenu texte",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_avl_point_contenu",
+            "label": "Contenu du tooltip",
+            "name": "contenu",
+            "type": "wysiwyg",
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0,
+            "instructions": "Texte, images et liens. Pour une vidéo : coller une URL YouTube ou Vimeo sur sa propre ligne.",
+            "required": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "avl_point"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0,
+    "modified": 1758320000
+}

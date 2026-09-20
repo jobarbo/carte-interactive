@@ -149,8 +149,15 @@
 }
 
 .carte-avl__pin-icon svg,
-.carte-avl__flag-icon svg {
+.carte-avl__flag-icon svg,
+.carte-avl__flag-icon img {
 	display: block;
+}
+
+.carte-avl__flag-icon img {
+	width: 28px;
+	height: 36px;
+	object-fit: contain;
 }
 
 /* —— Tooltip —— */
@@ -289,8 +296,15 @@
 }
 
 .carte-avl__legend-pin svg,
-.carte-avl__legend-flag svg {
+.carte-avl__legend-flag svg,
+.carte-avl__legend-flag img {
 	display: block;
+}
+
+.carte-avl__legend-flag img {
+	width: 18px;
+	height: 24px;
+	object-fit: contain;
 }
 
 /* —— Idle animations (subtle) —— */
