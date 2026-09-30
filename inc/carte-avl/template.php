@@ -34,6 +34,7 @@ $carte_avl_render_partner_flag = static function ($width = 28, $height = 36) {
 };
 ?>
 <div class="carte-avl" data-carte-avl>
+	<div class="carte-avl__map">
 	<div
 		class="carte-avl__scene"
 		style="aspect-ratio: <?php echo esc_attr($cw . ' / ' . $ch); ?>;"
@@ -148,40 +149,49 @@ $carte_avl_render_partner_flag = static function ($width = 28, $height = 36) {
 					<?php endif; ?>
 					<span class="screen-reader-text"><?php echo esc_html($titre); ?></span>
 				</button>
-
-				<div
-					id="<?php echo esc_attr($pin_id); ?>-tip"
-					class="carte-avl__tooltip"
-					hidden
-					role="dialog"
-					aria-label="<?php echo esc_attr($titre); ?>"
-					data-pin-id="<?php echo esc_attr($pin_id); ?>"
-					style="left:<?php echo esc_attr((string) $x); ?>%;top:<?php echo esc_attr((string) max(0, $y - 8)); ?>%;"
-				>
-					<button type="button" class="carte-avl__tooltip-close" aria-label="Fermer">&times;</button>
-					<?php if ($titre !== '') : ?>
-						<h3 class="carte-avl__tooltip-title"><?php echo esc_html($titre); ?></h3>
-					<?php endif; ?>
-					<div class="carte-avl__tooltip-body">
-						<?php
-						if ($contenu !== '') {
-							echo apply_filters('the_content', $contenu); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						}
-						?>
-					</div>
-					<?php if ($lien !== '' && filter_var($lien, FILTER_VALIDATE_URL)) : ?>
-						<p class="carte-avl__tooltip-link-wrap">
-							<a
-								class="carte-avl__tooltip-link"
-								href="<?php echo esc_url($lien); ?>"
-								target="_blank"
-								rel="noopener noreferrer"
-							><?php esc_html_e('En savoir plus', 'bootscore'); ?></a>
-						</p>
-					<?php endif; ?>
-				</div>
 			<?php endforeach; ?>
 		</div>
+	</div>
+
+	<div class="carte-avl__tooltips">
+		<?php foreach ($points as $point) :
+			$titre   = $point['titre'];
+			$contenu = $point['contenu'];
+			$lien    = $point['lien'];
+			$pin_id  = 'avl-pin-' . (int) $point['id'];
+			?>
+			<div
+				id="<?php echo esc_attr($pin_id); ?>-tip"
+				class="carte-avl__tooltip"
+				hidden
+				role="dialog"
+				aria-label="<?php echo esc_attr($titre); ?>"
+				data-pin-id="<?php echo esc_attr($pin_id); ?>"
+			>
+				<button type="button" class="carte-avl__tooltip-close" aria-label="Fermer">&times;</button>
+				<?php if ($titre !== '') : ?>
+					<h3 class="carte-avl__tooltip-title"><?php echo esc_html($titre); ?></h3>
+				<?php endif; ?>
+				<div class="carte-avl__tooltip-body">
+					<?php
+					if ($contenu !== '') {
+						echo apply_filters('the_content', $contenu); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					}
+					?>
+				</div>
+				<?php if ($lien !== '' && filter_var($lien, FILTER_VALIDATE_URL)) : ?>
+					<p class="carte-avl__tooltip-link-wrap">
+						<a
+							class="carte-avl__tooltip-link"
+							href="<?php echo esc_url($lien); ?>"
+							target="_blank"
+							rel="noopener noreferrer"
+						><?php esc_html_e('En savoir plus', 'bootscore'); ?></a>
+					</p>
+				<?php endif; ?>
+			</div>
+		<?php endforeach; ?>
+	</div>
 	</div>
 
 	<div class="carte-avl__legend" aria-label="Légende">
