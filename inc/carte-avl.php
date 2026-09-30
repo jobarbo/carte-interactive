@@ -205,6 +205,7 @@ function carte_avl_get_points() {
 		$y       = function_exists('get_field') ? get_field('y', $post->ID) : get_post_meta($post->ID, 'y', true);
 		$lien    = function_exists('get_field') ? get_field('lien', $post->ID) : get_post_meta($post->ID, 'lien', true);
 		$contenu = function_exists('get_field') ? get_field('contenu', $post->ID) : get_post_meta($post->ID, 'contenu', true);
+		$date    = (string) get_post_meta($post->ID, 'date_evenement', true);
 		if (!is_string($contenu) || $contenu === '') {
 			$contenu = (string) $post->post_content;
 		}
@@ -224,11 +225,51 @@ function carte_avl_get_points() {
 			'y'       => is_numeric($y) ? (float) $y : 50.0,
 			'contenu' => is_string($contenu) ? $contenu : '',
 			'lien'    => is_string($lien) ? trim($lien) : '',
+			'date'    => preg_match('/^\d{8}$/', $date) ? $date : '',
 		);
 	}
 
 	wp_reset_postdata();
 	return $points;
+}
+
+/**
+ * Dated partner events grouped by cohort, in chronological order.
+ * Authors are never part of a route; a route needs at least 2 events.
+ *
+ * @param array<int, array<string, mixed>> $points From carte_avl_get_points().
+ * @return array<int, array{edition:string,points:array<int, array{id:int,x:float,y:float}>}>
+ */
+function carte_avl_event_routes(array $points) {
+	$grouped = array();
+
+	foreach ($points as $point) {
+		if ($point['type'] !== 'evenement' || $point['date'] === '') {
+			continue;
+		}
+		$grouped[ $point['edition'] ][] = $point;
+	}
+
+	$routes = array();
+	foreach ($grouped as $edition => $events) {
+		if (count($events) < 2) {
+			continue;
+		}
+		usort($events, static function ($a, $b) {
+			return array($a['date'], $a['id']) <=> array($b['date'], $b['id']);
+		});
+		$routes[] = array(
+			'edition' => (string) $edition,
+			'points'  => array_map(
+				static function ($p) {
+					return array('id' => (int) $p['id'], 'x' => (float) $p['x'], 'y' => (float) $p['y']);
+				},
+				$events
+			),
+		);
+	}
+
+	return $routes;
 }
 
 /**

@@ -24,11 +24,14 @@ foreach ($layers as $layer) {
 	$max_z = max($max_z, (int) ($layer['zIndex'] ?? 0));
 }
 $pins_z = $max_z + 10;
+$routes = carte_avl_event_routes($points);
 
-$carte_avl_render_partner_flag = static function ($width = 28, $height = 36) {
+// Traced from the "partenaire" layer of carte_SOURCES_final.psd (31×50): full-height pole + swallowtail pennant.
+$carte_avl_render_partner_flag = static function ($width = 26, $height = 42) {
 	?>
-	<svg viewBox="0 0 24 32" width="<?php echo (int) $width; ?>" height="<?php echo (int) $height; ?>" focusable="false" aria-hidden="true">
-		<path fill="#1a3a6b" d="M4 2v28M4 2h14l-3 5 3 5H4"/>
+	<svg viewBox="0 0 31 50" width="<?php echo (int) $width; ?>" height="<?php echo (int) $height; ?>" focusable="false" aria-hidden="true">
+		<path fill="none" stroke="#0b2a6d" stroke-width="2" stroke-linecap="round" d="M2.5 1v48"/>
+		<path fill="#0b2a6d" d="M3 2h28l-6 9.5 6 9.5H3z"/>
 	</svg>
 	<?php
 };
@@ -109,6 +112,35 @@ $carte_avl_render_partner_flag = static function ($width = 28, $height = 36) {
 			</ul>
 		</div>
 
+		<?php if (!empty($routes)) : ?>
+			<svg
+				class="carte-avl__routes"
+				viewBox="0 0 <?php echo (int) $cw; ?> <?php echo (int) $ch; ?>"
+				style="z-index:<?php echo (int) $pins_z - 1; ?>;"
+				aria-hidden="true"
+				focusable="false"
+			>
+				<?php foreach ($routes as $route) :
+					$stops = array_map(
+						static function ($p) use ($cw, $ch) {
+							return array(round($p['x'] / 100 * $cw, 1), round($p['y'] / 100 * $ch, 1));
+						},
+						$route['points']
+					);
+					?>
+					<g
+						class="carte-avl__route"
+						data-edition="<?php echo esc_attr($route['edition']); ?>"
+						data-stops="<?php echo esc_attr(wp_json_encode($stops)); ?>"
+						data-width="<?php echo (int) $cw; ?>"
+						data-height="<?php echo (int) $ch; ?>"
+					>
+						<path />
+					</g>
+				<?php endforeach; ?>
+			</svg>
+		<?php endif; ?>
+
 		<div class="carte-avl__pins" style="z-index:<?php echo (int) $pins_z; ?>;">
 			<?php foreach ($points as $point) :
 				$titre   = $point['titre'];
@@ -134,9 +166,9 @@ $carte_avl_render_partner_flag = static function ($width = 28, $height = 36) {
 					<?php if ($is_flag) : ?>
 						<span class="carte-avl__flag-icon" aria-hidden="true">
 							<?php if ($partner_icon !== '') : ?>
-								<img src="<?php echo esc_url($partner_icon); ?>" alt="" width="28" height="36" draggable="false">
+								<img src="<?php echo esc_url($partner_icon); ?>" alt="" width="26" height="42" draggable="false">
 							<?php else : ?>
-								<?php $carte_avl_render_partner_flag(28, 36); ?>
+								<?php $carte_avl_render_partner_flag(26, 42); ?>
 							<?php endif; ?>
 						</span>
 					<?php else : ?>
@@ -207,9 +239,9 @@ $carte_avl_render_partner_flag = static function ($width = 28, $height = 36) {
 			<li>
 				<span class="carte-avl__legend-flag" aria-hidden="true">
 					<?php if ($partner_icon !== '') : ?>
-						<img src="<?php echo esc_url($partner_icon); ?>" alt="" width="18" height="24" draggable="false">
+						<img src="<?php echo esc_url($partner_icon); ?>" alt="" width="15" height="24" draggable="false">
 					<?php else : ?>
-						<?php $carte_avl_render_partner_flag(18, 24); ?>
+						<?php $carte_avl_render_partner_flag(15, 24); ?>
 					<?php endif; ?>
 				</span>
 				<span><?php echo esc_html($ui['legende_partenaire']); ?></span>

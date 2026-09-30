@@ -113,6 +113,47 @@ add_action('acf/input/admin_enqueue_scripts', function () {
 	wp_enqueue_editor();
 	wp_enqueue_media();
 });
+
+/**
+ * Admin list: event date column (sortable).
+ */
+add_filter('manage_avl_point_posts_columns', function ($columns) {
+	$new = array();
+	foreach ($columns as $key => $label) {
+		$new[ $key ] = $label;
+		if ($key === 'title') {
+			$new['avl_date_evenement'] = 'Date (événement)';
+		}
+	}
+	return $new;
+});
+
+add_action('manage_avl_point_posts_custom_column', function ($column, $post_id) {
+	if ($column !== 'avl_date_evenement') {
+		return;
+	}
+	if (get_post_meta($post_id, 'type', true) !== 'evenement') {
+		echo '—';
+		return;
+	}
+	$raw  = (string) get_post_meta($post_id, 'date_evenement', true);
+	$date = $raw !== '' ? DateTime::createFromFormat('Ymd', $raw) : false;
+	echo $date ? esc_html($date->format('d/m/Y')) : '<em>À définir</em>';
+}, 10, 2);
+
+add_filter('manage_edit-avl_point_sortable_columns', function ($columns) {
+	$columns['avl_date_evenement'] = 'avl_date_evenement';
+	return $columns;
+});
+
+add_action('pre_get_posts', function ($query) {
+	if (!is_admin() || !$query->is_main_query() || $query->get('orderby') !== 'avl_date_evenement') {
+		return;
+	}
+	$query->set('meta_key', 'date_evenement');
+	$query->set('orderby', 'meta_value');
+});
+
 /**
  * Default cohortes to seed.
  *

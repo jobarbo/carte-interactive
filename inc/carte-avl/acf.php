@@ -126,6 +126,27 @@ add_action('acf/init', function () {
 				'wrapper'       => array('width' => '50', 'class' => '', 'id' => ''),
 			),
 			array(
+				'key'               => 'field_avl_point_date_evenement',
+				'label'             => 'Date de l’événement',
+				'name'              => 'date_evenement',
+				'type'              => 'date_picker',
+				'instructions'      => 'Ordre du chemin pointillé pour cette année.',
+				'display_format'    => 'd/m/Y',
+				'return_format'     => 'Ymd',
+				'first_day'         => 0,
+				'required'          => 1,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field'    => 'field_avl_point_type',
+							'operator' => '==',
+							'value'    => 'evenement',
+						),
+					),
+				),
+				'wrapper'           => array('width' => '50', 'class' => '', 'id' => ''),
+			),
+			array(
 				'key'       => 'field_avl_tab_contenu',
 				'label'     => 'Contenu texte',
 				'name'      => '',
