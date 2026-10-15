@@ -432,14 +432,6 @@
 		animation: carte-avl-float 4.5s ease-in-out infinite;
 	}
 
-	.carte-avl__layer--puffin {
-		animation: carte-avl-float 5.2s ease-in-out infinite 0.4s;
-	}
-
-	.carte-avl__layer--orignal {
-		animation: carte-avl-float 6s ease-in-out infinite 0.8s;
-	}
-
 	/* Staggered swell: each wave drifts + breathes on its own rhythm */
 	[class*="carte-avl__layer--vague-"] {
 		animation: carte-avl-wave 3.6s ease-in-out infinite;

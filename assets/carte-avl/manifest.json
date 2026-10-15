@@ -6,7 +6,7 @@
   "layers": [
     {
       "name": "map-sources-psd",
-      "file": "map-sources-psd.png",
+      "file": "map-sources-psd.webp",
       "zIndex": 0,
       "position": {
         "centerLeft": 50,

@@ -17,8 +17,6 @@ define('CARTE_AVL_ASSETS_URI', get_stylesheet_directory_uri() . '/assets/carte-a
 require_once CARTE_AVL_DIR . '/cpt.php';
 require_once CARTE_AVL_DIR . '/acf.php';
 require_once CARTE_AVL_DIR . '/shortcode.php';
-require_once CARTE_AVL_DIR . '/migrate.php';
-
 /**
  * Register Elementor widget when Elementor is loaded.
  */
