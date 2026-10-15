@@ -316,5 +316,28 @@ function bidirectional_acf_update_value( $value, $post_id, $field  ) {
 
 add_filter('acf/update_value/name=relations_artistes_realisations', 'bidirectional_acf_update_value', 10, 3);
 
+/* Scripts inline collés dans le contenu (ex. bloc HTML) : wptexturize peut y convertir && en &#038;&#038; et casser le JS. */
+function rhizome_inline_scripts_store($content = null) {
+	static $scripts = array();
+	if ($content === null) {
+		return $scripts;
+	}
+	return preg_replace_callback('#<script\b[^>]*>.*?</script>#is', function ($m) use (&$scripts) {
+		$scripts[] = $m[0];
+		return '<script data-rhizome-inline="' . (count($scripts) - 1) . '"></script>';
+	}, $content);
+}
+
+add_filter('the_content', function ($content) {
+	return stripos($content, '<script') === false ? $content : rhizome_inline_scripts_store($content);
+}, 9);
+
+add_filter('the_content', function ($content) {
+	$scripts = rhizome_inline_scripts_store();
+	return preg_replace_callback('#<script data-rhizome-inline="(\d+)"></script>#', function ($m) use ($scripts) {
+		return $scripts[(int) $m[1]] ?? '';
+	}, $content);
+}, 11);
+
 /* Carte interactive Avez-vous lu (ACF + Elementor) */
 require_once get_stylesheet_directory() . '/inc/carte-avl.php';

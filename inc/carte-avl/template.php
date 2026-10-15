@@ -38,6 +38,36 @@ $carte_avl_render_partner_flag = static function ($width = 26, $height = 42) {
 ?>
 <div class="carte-avl" data-carte-avl>
 	<div class="carte-avl__map">
+	<div class="carte-avl__editions" aria-label="<?php echo esc_attr($ui['filtre_titre']); ?>">
+		<p class="carte-avl__editions-title"><?php echo esc_html($ui['filtre_titre']); ?></p>
+		<ul class="carte-avl__editions-list">
+			<?php foreach ($categories as $cat) : ?>
+				<li>
+					<button
+						type="button"
+						class="carte-avl__filter"
+						data-edition="<?php echo esc_attr($cat['cle']); ?>"
+						aria-pressed="false"
+					>
+						<span class="carte-avl__swatch" style="background:<?php echo esc_attr($cat['couleur']); ?>;"></span>
+						<span><?php echo esc_html($cat['libelle']); ?></span>
+					</button>
+				</li>
+			<?php endforeach; ?>
+			<li>
+				<button
+					type="button"
+					class="carte-avl__filter carte-avl__filter--all is-active"
+					data-edition="all"
+					aria-pressed="true"
+				>
+					<span class="carte-avl__swatch carte-avl__swatch--all"></span>
+					<span><?php echo esc_html($ui['filtre_toutes']); ?></span>
+				</button>
+			</li>
+		</ul>
+	</div>
+
 	<div
 		class="carte-avl__scene"
 		style="aspect-ratio: <?php echo esc_attr($cw . ' / ' . $ch); ?>;"
@@ -81,36 +111,6 @@ $carte_avl_render_partner_flag = static function ($width = 26, $height = 42) {
 				<p>Manifest des calques introuvable. Lancez l’export PSD.</p>
 			</div>
 		<?php endif; ?>
-
-		<div class="carte-avl__editions" aria-label="<?php echo esc_attr($ui['filtre_titre']); ?>">
-			<p class="carte-avl__editions-title"><?php echo esc_html($ui['filtre_titre']); ?></p>
-			<ul class="carte-avl__editions-list">
-				<?php foreach ($categories as $cat) : ?>
-					<li>
-						<button
-							type="button"
-							class="carte-avl__filter"
-							data-edition="<?php echo esc_attr($cat['cle']); ?>"
-							aria-pressed="false"
-						>
-							<span class="carte-avl__swatch" style="background:<?php echo esc_attr($cat['couleur']); ?>;"></span>
-							<span><?php echo esc_html($cat['libelle']); ?></span>
-						</button>
-					</li>
-				<?php endforeach; ?>
-				<li>
-					<button
-						type="button"
-						class="carte-avl__filter carte-avl__filter--all is-active"
-						data-edition="all"
-						aria-pressed="true"
-					>
-						<span class="carte-avl__swatch carte-avl__swatch--all"></span>
-						<span><?php echo esc_html($ui['filtre_toutes']); ?></span>
-					</button>
-				</li>
-			</ul>
-		</div>
 
 		<?php if (!empty($routes)) : ?>
 			<svg
@@ -200,10 +200,12 @@ $carte_avl_render_partner_flag = static function ($width = 26, $height = 42) {
 				aria-label="<?php echo esc_attr($titre); ?>"
 				data-pin-id="<?php echo esc_attr($pin_id); ?>"
 			>
-				<button type="button" class="carte-avl__tooltip-close" aria-label="Fermer">&times;</button>
-				<?php if ($titre !== '') : ?>
-					<h3 class="carte-avl__tooltip-title"><?php echo esc_html($titre); ?></h3>
-				<?php endif; ?>
+				<div class="carte-avl__tooltip-head">
+					<button type="button" class="carte-avl__tooltip-close" aria-label="Fermer">&times;</button>
+					<?php if ($titre !== '') : ?>
+						<h3 class="carte-avl__tooltip-title"><?php echo esc_html($titre); ?></h3>
+					<?php endif; ?>
+				</div>
 				<div class="carte-avl__tooltip-body">
 					<?php
 					if ($contenu !== '') {

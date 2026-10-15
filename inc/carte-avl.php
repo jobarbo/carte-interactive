@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Carte Avez-vous lu — bootstrap.
  *
@@ -163,7 +164,7 @@ function carte_avl_get_categories($visible_only = true) {
 function carte_avl_edition_colors() {
 	$map = array();
 	foreach (carte_avl_get_categories(false) as $cat) {
-		$map[ $cat['cle'] ] = $cat['couleur'];
+		$map[$cat['cle']] = $cat['couleur'];
 	}
 	return $map;
 }
@@ -176,7 +177,7 @@ function carte_avl_edition_colors() {
 function carte_avl_edition_labels() {
 	$map = array();
 	foreach (carte_avl_get_categories(false) as $cat) {
-		$map[ $cat['cle'] ] = $cat['libelle'];
+		$map[$cat['cle']] = $cat['libelle'];
 	}
 	return $map;
 }
@@ -247,7 +248,7 @@ function carte_avl_event_routes(array $points) {
 		if ($point['type'] !== 'evenement' || $point['date'] === '') {
 			continue;
 		}
-		$grouped[ $point['edition'] ][] = $point;
+		$grouped[$point['edition']][] = $point;
 	}
 
 	$routes = array();

@@ -345,6 +345,48 @@
 		};
 	}
 
+	const mobileQuery = window.matchMedia("(max-width: 768px)");
+	const SWIPE_CLOSE = 80; // px dragged down before the sheet closes on release
+
+	/* Drag the sheet down by its header; release past SWIPE_CLOSE (or with a quick flick) to close. */
+	function setupSwipe(tip, close) {
+		const head = tip.querySelector(".carte-avl__tooltip-head");
+		if (!head) return;
+		let startY = 0;
+		let startTime = 0;
+		let dy = 0;
+		let dragging = false;
+
+		head.addEventListener("touchstart", function (e) {
+			if (!mobileQuery.matches || e.touches.length !== 1) return;
+			dragging = true;
+			startY = e.touches[0].clientY;
+			startTime = Date.now();
+			dy = 0;
+			tip.classList.add("is-dragging");
+		}, { passive: true });
+
+		head.addEventListener("touchmove", function (e) {
+			if (!dragging) return;
+			dy = Math.max(0, e.touches[0].clientY - startY);
+			tip.style.transform = "translateY(" + dy + "px)";
+		}, { passive: true });
+
+		function end() {
+			if (!dragging) return;
+			dragging = false;
+			tip.classList.remove("is-dragging");
+			const flick = dy > 30 && dy / Math.max(1, Date.now() - startTime) > 0.5;
+			if (dy > SWIPE_CLOSE || flick) {
+				close(true);
+			} else {
+				tip.style.transform = "";
+			}
+		}
+		head.addEventListener("touchend", end);
+		head.addEventListener("touchcancel", end);
+	}
+
 	function initCarte(root) {
 		if (!root || root.dataset.carteAvlReady) return;
 		root.dataset.carteAvlReady = "1";
@@ -356,25 +398,37 @@
 
 		drawRoutes(root);
 		const replayRoutes = setupReveal(root);
+		let openerPin = null;
 
-		function closeAll() {
+		function lockScroll(lock) {
+			document.documentElement.classList.toggle("carte-avl-sheet-open", lock);
+		}
+
+		// Restore focus only on explicit closes (button, Escape, swipe), not when the user clicks elsewhere.
+		function closeAll(restoreFocus) {
+			const wasOpen = root.classList.contains("is-tooltip-open");
 			tips.forEach(function (tip) {
 				tip.hidden = true;
+				tip.removeAttribute("aria-modal");
+				tip.style.transform = "";
 			});
 			pins.forEach(function (pin) {
 				pin.setAttribute("aria-expanded", "false");
 			});
 			root.classList.remove("is-tooltip-open");
+			if (!wasOpen) return;
+			lockScroll(false);
+			if (restoreFocus === true && openerPin) openerPin.focus({ preventScroll: true });
+			openerPin = null;
 		}
 
 		function placeTip(tip, pin) {
 			const map = root.querySelector(".carte-avl__map") || root;
-			const mobile = window.matchMedia("(max-width: 640px)").matches;
 			tip.style.left = "";
 			tip.style.top = "";
 			tip.style.transform = "";
 			tip.classList.remove("is-left", "is-right");
-			if (mobile) return;
+			if (mobileQuery.matches) return;
 
 			const mapRect = map.getBoundingClientRect();
 			const pinRect = pin.getBoundingClientRect();
@@ -425,10 +479,19 @@
 			tip.hidden = false;
 			pin.setAttribute("aria-expanded", "true");
 			root.classList.add("is-tooltip-open");
+			openerPin = pin;
 			placeTip(tip, pin);
 			requestAnimationFrame(function () {
 				placeTip(tip, pin);
 			});
+
+			if (mobileQuery.matches) {
+				tip.setAttribute("aria-modal", "true");
+				tip.scrollTop = 0;
+				lockScroll(true);
+				const closeBtn = tip.querySelector(".carte-avl__tooltip-close");
+				if (closeBtn) closeBtn.focus({ preventScroll: true });
+			}
 		}
 
 		pins.forEach(function (pin) {
@@ -449,12 +512,13 @@
 			if (closeBtn) {
 				closeBtn.addEventListener("click", function (e) {
 					e.stopPropagation();
-					closeAll();
+					closeAll(true);
 				});
 			}
 			tip.addEventListener("click", function (e) {
 				e.stopPropagation();
 			});
+			setupSwipe(tip, closeAll);
 		});
 
 		document.addEventListener("click", function (e) {
@@ -471,7 +535,7 @@
 		});
 
 		document.addEventListener("keydown", function (e) {
-			if (e.key === "Escape") closeAll();
+			if (e.key === "Escape") closeAll(true);
 		});
 
 		function setFilter(edition) {
@@ -510,6 +574,17 @@
 				'.carte-avl__tooltip[data-pin-id="' + openPin.getAttribute("data-pin-id") + '"]'
 			);
 			if (tip && !tip.hidden) placeTip(tip, openPin);
+		});
+
+		mobileQuery.addEventListener("change", function () {
+			const tip = tips.find(function (t) { return !t.hidden; });
+			if (!tip) return;
+			lockScroll(mobileQuery.matches);
+			if (mobileQuery.matches) {
+				tip.setAttribute("aria-modal", "true");
+			} else {
+				tip.removeAttribute("aria-modal");
+			}
 		});
 	}
 
