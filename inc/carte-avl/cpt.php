@@ -203,18 +203,17 @@ function carte_avl_seed_cohortes() {
 	foreach (carte_avl_default_cohortes() as $row) {
 		$existing = get_term_by('slug', $row['slug'], 'avl_cohorte');
 		if ($existing && !is_wp_error($existing)) {
-			$term_id = (int) $existing->term_id;
-		} else {
-			$result = wp_insert_term(
-				$row['name'],
-				'avl_cohorte',
-				array('slug' => $row['slug'])
-			);
-			if (is_wp_error($result)) {
-				continue;
-			}
-			$term_id = (int) $result['term_id'];
+			continue;
 		}
+		$result = wp_insert_term(
+			$row['name'],
+			'avl_cohorte',
+			array('slug' => $row['slug'])
+		);
+		if (is_wp_error($result)) {
+			continue;
+		}
+		$term_id = (int) $result['term_id'];
 
 		if (function_exists('update_field')) {
 			update_field('couleur', $row['couleur'], 'avl_cohorte_' . $term_id);
@@ -228,8 +227,13 @@ function carte_avl_seed_cohortes() {
 	}
 }
 
+// Seed once only: cohorts edited or deleted in the admin must not come back.
 add_action('init', function () {
+	if (get_option('carte_avl_cohortes_seeded_v1')) {
+		return;
+	}
 	carte_avl_seed_cohortes();
+	update_option('carte_avl_cohortes_seeded_v1', 1);
 }, 20);
 
 /**
