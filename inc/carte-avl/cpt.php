@@ -157,7 +157,7 @@ add_action('pre_get_posts', function ($query) {
 /**
  * Default cohortes to seed.
  *
- * @return array<int, array{slug:string,name:string,couleur:string,ordre:int,visible:int}>
+ * @return array<int, array{slug:string,name:string,couleur:string,visible:int}>
  */
 function carte_avl_default_cohortes() {
 	return array(
@@ -165,28 +165,24 @@ function carte_avl_default_cohortes() {
 			'slug'    => '2025',
 			'name'    => '2025',
 			'couleur' => '#F5D76E',
-			'ordre'   => 10,
 			'visible' => 1,
 		),
 		array(
 			'slug'    => '2026',
 			'name'    => '2026',
 			'couleur' => '#5BB8B8',
-			'ordre'   => 20,
 			'visible' => 1,
 		),
 		array(
 			'slug'    => '2027',
 			'name'    => '2027 — À venir',
 			'couleur' => '#E89BB5',
-			'ordre'   => 30,
 			'visible' => 1,
 		),
 		array(
 			'slug'    => '2028',
 			'name'    => '2028 — À venir',
 			'couleur' => '#C45C5C',
-			'ordre'   => 40,
 			'visible' => 1,
 		),
 	);
@@ -217,11 +213,9 @@ function carte_avl_seed_cohortes() {
 
 		if (function_exists('update_field')) {
 			update_field('couleur', $row['couleur'], 'avl_cohorte_' . $term_id);
-			update_field('ordre', $row['ordre'], 'avl_cohorte_' . $term_id);
 			update_field('visible', $row['visible'], 'avl_cohorte_' . $term_id);
 		} else {
 			update_term_meta($term_id, 'couleur', $row['couleur']);
-			update_term_meta($term_id, 'ordre', $row['ordre']);
 			update_term_meta($term_id, 'visible', $row['visible']);
 		}
 	}

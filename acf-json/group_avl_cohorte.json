@@ -10,21 +10,7 @@
             "default_value": "#F5D76E",
             "required": 1,
             "wrapper": {
-                "width": "33",
-                "class": "",
-                "id": ""
-            }
-        },
-        {
-            "key": "field_avl_cohorte_ordre",
-            "label": "Ordre",
-            "name": "ordre",
-            "type": "number",
-            "instructions": "Ordre dans le filtre et la légende (plus petit = plus haut).",
-            "default_value": 10,
-            "required": 1,
-            "wrapper": {
-                "width": "33",
+                "width": "",
                 "class": "",
                 "id": ""
             }
@@ -37,7 +23,7 @@
             "ui": 1,
             "default_value": 1,
             "wrapper": {
-                "width": "34",
+                "width": "",
                 "class": "",
                 "id": ""
             }
@@ -59,5 +45,5 @@
     "instruction_placement": "label",
     "active": true,
     "show_in_rest": 0,
-    "modified": 1758310000
+    "modified": 1760578800
 }

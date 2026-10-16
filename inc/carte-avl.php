@@ -95,10 +95,24 @@ function carte_avl_get_term_meta($term_id, $key, $default = null) {
 }
 
 /**
+ * Extract a 4-digit year from a cohort slug or label (e.g. "2027", "2027-a-venir").
+ *
+ * @param string $text
+ * @return int|null
+ */
+function carte_avl_parse_year($text) {
+	if (preg_match('/\b(19|20)\d{2}\b/', (string) $text, $m)) {
+		return (int) $m[0];
+	}
+	return null;
+}
+
+/**
  * Cohortes for filter / legend (visible only by default).
+ * Sorted chronologically by year when the name/slug contains one.
  *
  * @param bool $visible_only
- * @return array<int, array{cle:string,libelle:string,couleur:string,ordre:int,visible:bool,term_id:int}>
+ * @return array<int, array{cle:string,libelle:string,couleur:string,visible:bool,term_id:int}>
  */
 function carte_avl_get_categories($visible_only = true) {
 	$terms = get_terms(
@@ -115,7 +129,6 @@ function carte_avl_get_categories($visible_only = true) {
 				'cle'     => $row['slug'],
 				'libelle' => $row['name'],
 				'couleur' => $row['couleur'],
-				'ordre'   => $row['ordre'],
 				'visible' => true,
 				'term_id' => 0,
 			);
@@ -130,12 +143,10 @@ function carte_avl_get_categories($visible_only = true) {
 			continue;
 		}
 		$couleur = (string) carte_avl_get_term_meta($term->term_id, 'couleur', '#F5D76E');
-		$ordre   = (int) carte_avl_get_term_meta($term->term_id, 'ordre', 100);
 		$out[]   = array(
 			'cle'     => $term->slug,
 			'libelle' => $term->name,
 			'couleur' => $couleur !== '' ? $couleur : '#F5D76E',
-			'ordre'   => $ordre,
 			'visible' => $visible,
 			'term_id' => (int) $term->term_id,
 		);
@@ -144,10 +155,18 @@ function carte_avl_get_categories($visible_only = true) {
 	usort(
 		$out,
 		static function ($a, $b) {
-			if ($a['ordre'] === $b['ordre']) {
-				return strcmp($a['cle'], $b['cle']);
+			$year_a = carte_avl_parse_year($a['cle']) ?? carte_avl_parse_year($a['libelle']);
+			$year_b = carte_avl_parse_year($b['cle']) ?? carte_avl_parse_year($b['libelle']);
+			if ($year_a !== null && $year_b !== null && $year_a !== $year_b) {
+				return $year_a <=> $year_b;
 			}
-			return $a['ordre'] <=> $b['ordre'];
+			if ($year_a !== null && $year_b === null) {
+				return -1;
+			}
+			if ($year_a === null && $year_b !== null) {
+				return 1;
+			}
+			return strnatcasecmp($a['libelle'], $b['libelle']);
 		}
 	);
 

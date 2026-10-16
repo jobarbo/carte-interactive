@@ -199,17 +199,7 @@ add_action('acf/init', function () {
 				'type'          => 'color_picker',
 				'default_value' => '#F5D76E',
 				'required'      => 1,
-				'wrapper'       => array('width' => '33', 'class' => '', 'id' => ''),
-			),
-			array(
-				'key'           => 'field_avl_cohorte_ordre',
-				'label'         => 'Ordre',
-				'name'          => 'ordre',
-				'type'          => 'number',
-				'instructions'  => 'Ordre dans le filtre et la légende (plus petit = plus haut).',
-				'default_value' => 10,
-				'required'      => 1,
-				'wrapper'       => array('width' => '33', 'class' => '', 'id' => ''),
+				'wrapper'       => array('width' => '', 'class' => '', 'id' => ''),
 			),
 			array(
 				'key'           => 'field_avl_cohorte_visible',
@@ -218,7 +208,7 @@ add_action('acf/init', function () {
 				'type'          => 'true_false',
 				'ui'            => 1,
 				'default_value' => 1,
-				'wrapper'       => array('width' => '34', 'class' => '', 'id' => ''),
+				'wrapper'       => array('width' => '', 'class' => '', 'id' => ''),
 			),
 		),
 		'location' => array(
