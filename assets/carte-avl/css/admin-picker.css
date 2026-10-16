@@ -1,0 +1,44 @@
+.avl-hidden-field {
+	display: none !important;
+}
+
+.avl-picker {
+	max-width: 760px;
+}
+
+.avl-picker__map {
+	position: relative;
+	aspect-ratio: 1920 / 1440;
+	background: #f0f0f1 center / 100% 100% no-repeat;
+	border: 1px solid #c3c4c7;
+	cursor: crosshair;
+	touch-action: none;
+	user-select: none;
+}
+
+.avl-picker__pin {
+	position: absolute;
+	width: 22px;
+	height: 22px;
+	margin: -26px 0 0 -11px;
+	border-radius: 50% 50% 50% 0;
+	background: #d63638;
+	border: 2px solid #fff;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+	transform: rotate(-45deg);
+	transform-origin: 50% 50%;
+	cursor: grab;
+}
+
+.avl-picker__pin[hidden] {
+	display: none;
+}
+
+.avl-picker__status {
+	margin: 8px 0 0;
+	color: #50575e;
+}
+
+.avl-picker__status.is-error {
+	color: #d63638;
+}

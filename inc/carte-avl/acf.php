@@ -44,6 +44,17 @@ add_action('acf/init', function () {
  * Register field groups.
  */
 add_action('acf/init', function () {
+	// acf-json/ is the source of truth. The PHP definitions below are only a
+	// fallback, used when one of the three JSON files is missing.
+	$json_dir = get_stylesheet_directory() . '/acf-json/';
+	if (
+		file_exists($json_dir . 'group_avl_point.json')
+		&& file_exists($json_dir . 'group_avl_cohorte.json')
+		&& file_exists($json_dir . 'group_carte_avl.json')
+	) {
+		return;
+	}
+
 	if (!function_exists('acf_add_local_field_group')) {
 		return;
 	}
@@ -126,8 +137,26 @@ add_action('acf/init', function () {
 				'wrapper'       => array('width' => '50', 'class' => '', 'id' => ''),
 			),
 			array(
-				'key'               => 'field_avl_point_date_evenement',
-				'label'             => 'Date de l’événement',
+				'key'          => 'field_avl_point_code_postal',
+					'label'        => 'Code postal (point de départ)',
+					'name'         => 'code_postal',
+					'type'         => 'text',
+					'instructions' => 'Optionnel. Code postal canadien (ex. H2X 1Y4) : place une première position approximative sur la carte, que vous ajustez ensuite.',
+					'placeholder'  => 'A1A 1A1',
+					'required'     => 0,
+				),
+				array(
+					'key'       => 'field_avl_point_picker',
+					'label'     => 'Position sur la carte',
+					'name'      => '',
+					'type'      => 'message',
+					'message'   => '<div class="avl-picker" data-image="' . esc_url(CARTE_AVL_ASSETS_URI . '/layers/map-sources-psd.webp') . '"></div>',
+					'esc_html'  => 0,
+					'new_lines' => '',
+				),
+				array(
+					'key'               => 'field_avl_point_date_evenement',
+									'label'             => 'Date de l’événement',
 				'name'              => 'date_evenement',
 				'type'              => 'date_picker',
 				'instructions'      => 'Ordre du chemin pointillé pour cette année.',

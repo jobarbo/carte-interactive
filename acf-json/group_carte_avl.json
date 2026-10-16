@@ -48,6 +48,70 @@
             "library": "all",
             "mime_types": "png,svg,jpg,jpeg,webp",
             "instructions": "PNG ou SVG, fond transparent. Utilisée sur la carte et dans la légende. Si vide : drapeau SVG par défaut."
+        },
+        {
+            "key": "field_avl_tab_bornes",
+            "label": "Cadrage géographique",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_avl_bound_north",
+            "label": "Latitude nord",
+            "name": "avl_bound_north",
+            "type": "number",
+            "instructions": "Bord supérieur de l’illustration (degré). Défaut Canada : 83.",
+            "default_value": 83,
+            "step": "any",
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_bound_south",
+            "label": "Latitude sud",
+            "name": "avl_bound_south",
+            "type": "number",
+            "instructions": "Bord inférieur. Défaut Canada : 41.7.",
+            "default_value": 41.7,
+            "step": "any",
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_bound_west",
+            "label": "Longitude ouest",
+            "name": "avl_bound_west",
+            "type": "number",
+            "instructions": "Bord gauche. Défaut Canada : -141.",
+            "default_value": -141,
+            "step": "any",
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_bound_east",
+            "label": "Longitude est",
+            "name": "avl_bound_east",
+            "type": "number",
+            "instructions": "Bord droit. Défaut Canada : -52.6.",
+            "default_value": -52.6,
+            "step": "any",
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            }
         }
     ],
     "location": [
@@ -66,5 +130,5 @@
     "instruction_placement": "label",
     "active": true,
     "show_in_rest": 0,
-    "modified": 1758310000
+    "modified": 1760579220
 }

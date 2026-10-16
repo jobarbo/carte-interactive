@@ -61,36 +61,55 @@
             }
         },
         {
-            "key": "field_avl_point_x",
-            "label": "Coordonnée X (%)",
-            "name": "x",
-            "type": "number",
-            "instructions": "0 = gauche, 100 = droite.",
-            "min": 0,
-            "max": 100,
-            "step": 0.1,
-            "default_value": 50,
-            "required": 1,
+            "key": "field_avl_point_code_postal",
+            "label": "Code postal (point de départ)",
+            "name": "code_postal",
+            "type": "text",
+            "instructions": "Optionnel. Code postal canadien (ex. H2X 1Y4) : place une première position approximative sur la carte, que vous ajustez ensuite.",
+            "placeholder": "A1A 1A1",
+            "required": 0,
             "wrapper": {
-                "width": "50",
+                "width": "",
                 "class": "",
                 "id": ""
             }
         },
         {
-            "key": "field_avl_point_y",
-            "label": "Coordonnée Y (%)",
-            "name": "y",
+            "key": "field_avl_point_picker",
+            "label": "Position sur la carte",
+            "name": "",
+            "type": "message",
+            "message": "<div class=\"avl-picker\"></div>",
+            "new_lines": "",
+            "esc_html": 0
+        },
+        {
+            "key": "field_avl_point_x",
+            "label": "Position X (%)",
+            "name": "x",
             "type": "number",
-            "instructions": "0 = haut, 100 = bas.",
             "min": 0,
             "max": 100,
-            "step": 0.1,
-            "default_value": 50,
-            "required": 1,
+            "step": "any",
+            "required": 0,
             "wrapper": {
-                "width": "50",
-                "class": "",
+                "width": "",
+                "class": "avl-hidden-field",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_avl_point_y",
+            "label": "Position Y (%)",
+            "name": "y",
+            "type": "number",
+            "min": 0,
+            "max": 100,
+            "step": "any",
+            "required": 0,
+            "wrapper": {
+                "width": "",
+                "class": "avl-hidden-field",
                 "id": ""
             }
         },
@@ -156,5 +175,5 @@
     "instruction_placement": "label",
     "active": true,
     "show_in_rest": 0,
-    "modified": 1790733600
+    "modified": 1792000000
 }
