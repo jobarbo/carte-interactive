@@ -341,40 +341,228 @@
 		});
 	}
 
+	/*
+	 * Masks every route (hidden until played). `play` draws them all (called at the end of the
+	 * intro); `replay` redraws the routes the year filter brings back, once the first play happened.
+	 */
 	function setupReveal(root) {
+		const noop = { play: function () {}, replay: function () {} };
 		const svg = root.querySelector(".carte-avl__routes");
-		if (!svg) return function () {};
-		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
-			return function () {};
-		}
+		if (!svg || !canAnimate()) return noop;
 
 		const reveals = new Map();
 		svg.querySelectorAll(".carte-avl__route").forEach(function (g) {
 			const reveal = prepareReveal(svg, g);
 			if (reveal) reveals.set(g, reveal);
 		});
-		if (!reveals.size) return function () {};
+		if (!reveals.size) return noop;
 
 		let seen = false;
+		return {
+			play: function () {
+				seen = true;
+				reveals.forEach(playReveal);
+			},
+			replay: function (shownRoutes) {
+				if (!seen) return;
+				shownRoutes.forEach(function (g) {
+					const reveal = reveals.get(g);
+					if (reveal) playReveal(reveal);
+				});
+			},
+		};
+	}
+
+	function canAnimate() {
+		return (
+			!window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+			"IntersectionObserver" in window &&
+			typeof Element.prototype.animate === "function"
+		);
+	}
+
+	/*
+	 * Intro: the map arrives folded like a road map (an accordion of FOLD_PANELS vertical panels),
+	 * unfolds with a soft paper bounce, then the illustrations stand up from the page like a pop-up
+	 * book (rippling out from the centre), the pins sprout, and finally the routes draw themselves.
+	 * Until it plays, .is-intro-pending (set in the template) keeps layers, routes and pins hidden.
+	 */
+	const FOLD_PANELS = 4;
+	const FOLD_ANGLE = 170;
+	const EASE_PAPER = "cubic-bezier(0.35, 1.3, 0.55, 1)";
+	const EASE_POP = "cubic-bezier(0.34, 1.56, 0.64, 1)";
+	const INTRO = {
+		sheet: 1000, // packet travels to centre stage and flattens
+		panelDelay: 150,
+		panelStagger: 120,
+		panel: 1150,
+		popStart: 1300,
+		popSpread: 700, // centre → edges
+		pop: 700,
+		pinStart: 2150,
+		pinStagger: 45,
+		pin: 520,
+		routes: 2500,
+	};
+
+	function setupIntro(root, onDone) {
+		const scene = root.querySelector(".carte-avl__scene");
+		const editor = document.body.classList.contains("elementor-editor-active");
+		if (!scene || editor || !canAnimate()) {
+			root.classList.remove("is-intro-pending");
+			onDone();
+			return;
+		}
+
 		const io = new IntersectionObserver(
 			function (entries) {
 				if (!entries.some(function (e) { return e.isIntersecting; })) return;
-				seen = true;
 				io.disconnect();
-				reveals.forEach(playReveal);
+				try {
+					playIntro(root, scene, onDone);
+				} catch (e) {
+					root.classList.remove("is-intro-pending", "is-intro-playing");
+					onDone();
+				}
 			},
 			{ threshold: 0.35 }
 		);
-		io.observe(root.querySelector(".carte-avl__map") || svg);
+		io.observe(root.querySelector(".carte-avl__map") || scene);
+	}
 
-		// Replay a route when the year filter brings it back into view.
-		return function (shownRoutes) {
-			if (!seen) return;
-			shownRoutes.forEach(function (g) {
-				const reveal = reveals.get(g);
-				if (reveal) playReveal(reveal);
+	function playIntro(root, scene, onDone) {
+		const base = scene.querySelector(".carte-avl__layer--map-sources-psd");
+		const frame = scene.querySelector(".carte-avl__layer--cadre");
+		const sheetLayers = [base, frame].filter(Boolean);
+		const art = Array.from(scene.querySelectorAll(".carte-avl__layer")).filter(function (el) {
+			return sheetLayers.indexOf(el) < 0;
+		});
+		const pins = Array.from(scene.querySelectorAll(".carte-avl__pin:not(.is-filtered-out)"));
+
+		root.classList.add("is-intro-playing");
+
+		// Pop-ups: each illustration stands up from the page; closest to the centre first.
+		art.forEach(function (el) {
+			const x = parseFloat(el.style.getPropertyValue("--layer-center-left")) || 50;
+			const y = parseFloat(el.style.getPropertyValue("--layer-center-top")) || 50;
+			const dist = Math.min(1, Math.hypot(x - 50, y - 50) / 60);
+			const delay = INTRO.popStart + dist * INTRO.popSpread + Math.random() * 120;
+			const isWave = /carte-avl__layer--vague-/.test(el.className);
+			const frames = isWave
+				? [{ opacity: 0, scale: "0.4 1" }, { opacity: 1, scale: "1 1" }]
+				: [
+						{ rotate: "x 90deg", opacity: 0 },
+						{ opacity: 1, offset: 0.2 },
+						{ rotate: "x 0deg", opacity: 1 },
+				  ];
+			el.animate(frames, { duration: INTRO.pop, delay: delay, easing: EASE_POP, fill: "backwards" });
+		});
+
+		// Pins sprout from their foot (transform-origin 0 0 = the anchor point, given their translate).
+		pins.forEach(function (pin, i) {
+			pin.style.transformOrigin = "0 0";
+			const anim = pin.animate([{ scale: "0" }, { scale: "1" }], {
+				duration: INTRO.pin,
+				delay: INTRO.pinStart + i * INTRO.pinStagger,
+				easing: EASE_POP,
+				fill: "backwards",
 			});
-		};
+			anim.finished.then(function () { pin.style.transformOrigin = ""; }, function () {});
+		});
+
+		// The real map + frame stay hidden while the folded copy is on stage.
+		sheetLayers.forEach(function (el) { el.style.visibility = "hidden"; });
+		const fold = buildFold(scene, sheetLayers);
+		root.classList.remove("is-intro-pending");
+
+		playFold(fold).then(function () {
+			sheetLayers.forEach(function (el) { el.style.visibility = ""; });
+			requestAnimationFrame(function () { fold.root.remove(); });
+		});
+
+		setTimeout(onDone, INTRO.routes);
+		const end = Math.max(INTRO.popStart + INTRO.popSpread + 120 + INTRO.pop, INTRO.pinStart + pins.length * INTRO.pinStagger + INTRO.pin);
+		setTimeout(function () { root.classList.remove("is-intro-playing"); }, end + 100);
+	}
+
+	/*
+	 * Nested accordion: each panel is a child of the previous one, hinged on its left edge, so
+	 * folding them ±FOLD_ANGLE alternately stacks them into a zig-zag packet. Each panel shows its
+	 * own quarter of the map (front) and plain paper (back).
+	 */
+	function buildFold(scene, sheetLayers) {
+		const images = sheetLayers
+			.slice()
+			.reverse() // frame painted above the map
+			.map(function (img) { return 'url("' + (img.currentSrc || img.src) + '")'; })
+			.join(", ");
+
+		const root = document.createElement("div");
+		root.className = "carte-avl__fold";
+		root.setAttribute("aria-hidden", "true");
+
+		const sheet = document.createElement("div");
+		sheet.className = "carte-avl__fold-sheet";
+		sheet.style.width = 100 / FOLD_PANELS + "%";
+		root.appendChild(sheet);
+
+		const panels = [];
+		const shades = [];
+		let parent = sheet;
+		for (let i = 0; i < FOLD_PANELS; i++) {
+			const panel = document.createElement("div");
+			panel.className = "carte-avl__fold-panel";
+
+			const front = document.createElement("div");
+			front.className = "carte-avl__fold-face carte-avl__fold-face--front";
+			front.style.backgroundImage = images;
+			front.style.backgroundSize = FOLD_PANELS * 100 + "% 100%";
+			front.style.backgroundPosition = (i / (FOLD_PANELS - 1)) * 100 + "% 0";
+
+			const shade = document.createElement("div");
+			shade.className = "carte-avl__fold-shade carte-avl__fold-shade--" + (i % 2 ? "valley" : "mountain");
+			front.appendChild(shade);
+
+			const back = document.createElement("div");
+			back.className = "carte-avl__fold-face carte-avl__fold-face--back";
+
+			panel.appendChild(front);
+			panel.appendChild(back);
+			parent.appendChild(panel);
+			panels.push(panel);
+			shades.push(shade);
+			parent = panel;
+		}
+
+		// Behind the layers in paint order, so the pop-ups rise over the settling paper.
+		scene.insertBefore(root, scene.firstChild);
+		return { root: root, sheet: sheet, panels: panels, shades: shades };
+	}
+
+	function playFold(fold) {
+		// Packet starts centred: the sheet is one panel wide, so the centre is (n-1)/2 panels over.
+		const centre = ((FOLD_PANELS - 1) / 2) * 100;
+		const anims = [
+			fold.sheet.animate(
+				[
+					{ transform: "translateX(" + centre + "%) translateY(6%) rotateX(28deg) rotateZ(-4deg) scale(0.7)" },
+					{ transform: "none" },
+				],
+				{ duration: INTRO.sheet, easing: "cubic-bezier(0.25, 0.8, 0.3, 1)", fill: "both" }
+			),
+		];
+
+		fold.panels.forEach(function (panel, i) {
+			const delay = i ? INTRO.panelDelay + (i - 1) * INTRO.panelStagger : 0;
+			const timing = { duration: INTRO.panel, delay: delay, easing: EASE_PAPER, fill: "both" };
+			if (i) {
+				const angle = (i % 2 ? 1 : -1) * FOLD_ANGLE;
+				anims.push(panel.animate([{ transform: "rotateY(" + angle + "deg)" }, { transform: "rotateY(0deg)" }], timing));
+			}
+			anims.push(fold.shades[i].animate([{ opacity: 0.55 }, { opacity: 0 }], { duration: INTRO.panel, delay: delay, easing: "ease-out", fill: "both" }));
+		});
+
+		return Promise.all(anims.map(function (a) { return a.finished; }));
 	}
 
 	const mobileQuery = window.matchMedia("(max-width: 768px)");
@@ -429,7 +617,9 @@
 		const routes = Array.from(root.querySelectorAll(".carte-avl__route"));
 
 		drawRoutes(root);
-		const replayRoutes = setupReveal(root);
+		const routeReveal = setupReveal(root);
+		const replayRoutes = routeReveal.replay;
+		setupIntro(root, routeReveal.play);
 		let openerPin = null;
 
 		function lockScroll(lock) {

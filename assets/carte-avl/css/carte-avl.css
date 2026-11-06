@@ -456,6 +456,97 @@
 	object-fit: contain;
 }
 
+/* —— Intro: folded map that unfolds + pop-up illustrations (see setupIntro in JS) —— */
+@media (prefers-reduced-motion: no-preference) {
+	.carte-avl.is-intro-pending .carte-avl__layers,
+	.carte-avl.is-intro-pending .carte-avl__routes,
+	.carte-avl.is-intro-pending .carte-avl__pins {
+		visibility: hidden;
+	}
+}
+
+.carte-avl.is-intro-playing .carte-avl__scene {
+	overflow: visible;
+}
+
+.carte-avl.is-intro-playing .carte-avl__layers {
+	perspective: 1600px;
+}
+
+/*
+ * Pop-ups stand up from their base. Layers are placed with translate(-50%, -50%), so the visual
+ * bottom-centre is the box's (0, 50%) point. Waves keep their own centre for the idle swell.
+ */
+.carte-avl__layer:not([class*="carte-avl__layer--vague-"]) {
+	transform-origin: 0 50%;
+}
+
+.carte-avl__fold {
+	position: absolute;
+	inset: 0;
+	perspective: 2000px;
+	perspective-origin: 50% 40%;
+	pointer-events: none;
+}
+
+.carte-avl__fold-sheet,
+.carte-avl__fold-panel {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	transform-style: preserve-3d;
+}
+
+.carte-avl__fold-sheet {
+	left: 0;
+	transform-origin: 50% 50%;
+}
+
+.carte-avl__fold-panel {
+	left: 0;
+	width: 100%;
+	transform-origin: 0 50%;
+}
+
+/* Each panel after the first hangs off the right edge of the previous one. */
+.carte-avl__fold-panel .carte-avl__fold-panel {
+	left: 100%;
+}
+
+.carte-avl__fold-face {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: calc(100% + 1px); /* hides hairline seams between panels */
+	height: 100%;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+}
+
+.carte-avl__fold-face--front {
+	background-repeat: no-repeat;
+}
+
+.carte-avl__fold-face--back {
+	transform: rotateY(180deg);
+	background: #efe4d6;
+	box-shadow: inset 0 0 0 1px rgba(112, 98, 98, 0.15);
+}
+
+.carte-avl__fold-shade {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+}
+
+.carte-avl__fold-shade--mountain {
+	background: linear-gradient(90deg, rgba(40, 30, 30, 0) 40%, rgba(40, 30, 30, 0.45));
+}
+
+.carte-avl__fold-shade--valley {
+	background: linear-gradient(90deg, rgba(40, 30, 30, 0.45), rgba(40, 30, 30, 0) 60%);
+}
+
 /* —— Idle animations (subtle) —— */
 @media (prefers-reduced-motion: no-preference) {
 	.carte-avl__layer--canards,

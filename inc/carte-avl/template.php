@@ -36,7 +36,8 @@ $carte_avl_render_partner_flag = static function ($width = 26, $height = 42) {
 	<?php
 };
 ?>
-<div class="carte-avl" data-carte-avl>
+<div class="carte-avl is-intro-pending" data-carte-avl>
+	<noscript><style>.carte-avl.is-intro-pending .carte-avl__layers, .carte-avl.is-intro-pending .carte-avl__routes, .carte-avl.is-intro-pending .carte-avl__pins { visibility: visible; }</style></noscript>
 	<div class="carte-avl__map">
 	<div class="carte-avl__editions" aria-label="<?php echo esc_attr($ui['filtre_titre']); ?>">
 		<p class="carte-avl__editions-title"><?php echo esc_html($ui['filtre_titre']); ?></p>
