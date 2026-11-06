@@ -165,32 +165,63 @@
 		return segments;
 	}
 
-	function routePath(stops, width, height) {
-		if (stops.length < 2) return "";
+	/*
+	 * Returns the full route plus its two parts, split on stop `splitAt` (the first upcoming event):
+	 * `done` runs up to the last reached event, `upcoming` from there on (drawn paler).
+	 */
+	function routePath(stops, width, height, splitAt) {
+		if (stops.length < 2) return null;
 		const rand = Math.random;
-		const segments = routeSmooth(routeWander(stops, rand, width, height));
+		const pts = routeWander(stops, rand, width, height);
+		const segments = routeSmooth(pts);
 
 		const pt = function (p) {
 			return Math.round(p[0] * 10) / 10 + " " + Math.round(p[1] * 10) / 10;
 		};
-		return segments.reduce(function (d, s) {
-			return d + " C" + pt(s[1]) + " " + pt(s[2]) + " " + pt(s[3]);
-		}, "M" + pt(segments[0][0]));
+		const toD = function (segs) {
+			if (!segs.length) return "";
+			return segs.reduce(function (d, s) {
+				return d + " C" + pt(s[1]) + " " + pt(s[2]) + " " + pt(s[3]);
+			}, "M" + pt(segs[0][0]));
+		};
+
+		// routeWander pushes the stop arrays themselves, so the split point is found by identity.
+		// The last reached event is where the paler part starts.
+		let cut = segments.length;
+		if (splitAt < stops.length) cut = splitAt > 0 ? pts.indexOf(stops[splitAt - 1]) : 0;
+		if (cut < 0) cut = segments.length;
+
+		return {
+			full: toD(segments),
+			done: toD(segments.slice(0, cut)),
+			upcoming: toD(segments.slice(cut)),
+		};
 	}
 
 	function drawRoutes(root) {
 		root.querySelectorAll(".carte-avl__route[data-stops]").forEach(function (g) {
-			const path = g.querySelector("path");
 			let stops;
 			try {
 				stops = JSON.parse(g.getAttribute("data-stops"));
 			} catch (e) {
 				return;
 			}
+			if (!Array.isArray(stops)) return;
 			const width = parseFloat(g.getAttribute("data-width")) || 1920;
 			const height = parseFloat(g.getAttribute("data-height")) || 1440;
-			const d = Array.isArray(stops) ? routePath(stops, width, height) : "";
-			if (path && d) path.setAttribute("d", d);
+			const upcomingAttr = parseInt(g.getAttribute("data-upcoming"), 10);
+			const splitAt = isNaN(upcomingAttr) ? stops.length : upcomingAttr;
+			const route = routePath(stops, width, height, splitAt);
+			if (!route) return;
+
+			g.dataset.d = route.full;
+			const done = g.querySelector(".carte-avl__route-line:not(.carte-avl__route-line--upcoming)");
+			const upcoming = g.querySelector(".carte-avl__route-line--upcoming");
+			[[done, route.done], [upcoming, route.upcoming]].forEach(function (pair) {
+				if (!pair[0]) return;
+				if (pair[1]) pair[0].setAttribute("d", pair[1]);
+				else pair[0].removeAttribute("d");
+			});
 		});
 	}
 
@@ -206,8 +237,8 @@
 	 * pathLength=1 + dashoffset and progressively uncovers the dotted line.
 	 */
 	function prepareReveal(svg, g) {
-		const path = g.querySelector("path");
-		if (!path || !path.getAttribute("d")) return null;
+		const d = g.dataset.d;
+		if (!d) return null;
 
 		let defs = svg.querySelector("defs");
 		if (!defs) {
@@ -225,12 +256,13 @@
 		mask.setAttribute("height", vb.height);
 
 		const reveal = document.createElementNS(SVG_NS, "path");
-		reveal.setAttribute("d", path.getAttribute("d"));
+		reveal.setAttribute("d", d);
 		reveal.setAttribute("pathLength", "1");
 		reveal.setAttribute("class", "carte-avl__route-reveal");
 		mask.appendChild(reveal);
 		defs.appendChild(mask);
-		path.setAttribute("mask", "url(#" + id + ")");
+		// On the group, so one reveal runs across both the reached and the upcoming parts.
+		g.setAttribute("mask", "url(#" + id + ")");
 
 		let stops = [];
 		try {
@@ -238,7 +270,7 @@
 		} catch (e) {
 			stops = [];
 		}
-		return { el: reveal, keyframes: revealKeyframes(path, stops) };
+		return { el: reveal, keyframes: revealKeyframes(reveal, stops) };
 	}
 
 	/*

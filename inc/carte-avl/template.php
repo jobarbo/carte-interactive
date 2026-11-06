@@ -134,8 +134,10 @@ $carte_avl_render_partner_flag = static function ($width = 26, $height = 42) {
 						data-stops="<?php echo esc_attr(wp_json_encode($stops)); ?>"
 						data-width="<?php echo (int) $cw; ?>"
 						data-height="<?php echo (int) $ch; ?>"
+						data-upcoming="<?php echo (int) $route['upcoming']; ?>"
 					>
-						<path />
+						<path class="carte-avl__route-line" />
+						<path class="carte-avl__route-line carte-avl__route-line--upcoming" />
 					</g>
 				<?php endforeach; ?>
 			</svg>

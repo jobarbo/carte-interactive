@@ -270,6 +270,9 @@ function carte_avl_event_routes(array $points) {
 		$grouped[$point['edition']][] = $point;
 	}
 
+	// Events dated today or earlier count as reached; the rest of the route is drawn paler.
+	$today = wp_date('Ymd');
+
 	$routes = array();
 	foreach ($grouped as $edition => $events) {
 		if (count($events) < 2) {
@@ -278,9 +281,17 @@ function carte_avl_event_routes(array $points) {
 		usort($events, static function ($a, $b) {
 			return array($a['date'], $a['id']) <=> array($b['date'], $b['id']);
 		});
+		$upcoming = count($events);
+		foreach ($events as $i => $event) {
+			if ($event['date'] > $today) {
+				$upcoming = $i;
+				break;
+			}
+		}
 		$routes[] = array(
-			'edition' => (string) $edition,
-			'points'  => array_map(
+			'edition'  => (string) $edition,
+			'upcoming' => $upcoming,
+			'points'   => array_map(
 				static function ($p) {
 					return array('id' => (int) $p['id'], 'x' => (float) $p['x'], 'y' => (float) $p['y']);
 				},

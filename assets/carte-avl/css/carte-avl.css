@@ -160,7 +160,7 @@
 }
 
 /* Matches the dashed paths in carte_SOURCES_final.psd (values in 1920px canvas units) */
-.carte-avl__route path {
+.carte-avl__route-line {
 	fill: none;
 	stroke: #706262;
 	stroke-width: 4;
@@ -169,9 +169,14 @@
 	stroke-dasharray: 24 6;
 }
 
+/* From the last reached event onward: the journey still in progress. */
+.carte-avl__route-line--upcoming {
+	opacity: 0.35;
+}
+
 /* The map scales down with the screen, so the line gets thin on phones: thicker line, longer dashes. */
 @media (max-width: 768px) {
-	.carte-avl__route path {
+	.carte-avl__route-line {
 		stroke-width: 10;
 		stroke-dasharray: 50 14;
 	}
