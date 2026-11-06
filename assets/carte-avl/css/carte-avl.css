@@ -163,10 +163,23 @@
 .carte-avl__route path {
 	fill: none;
 	stroke: #706262;
-	stroke-width: 2;
+	stroke-width: 4;
 	stroke-linecap: butt;
 	stroke-linejoin: round;
-	stroke-dasharray: 6 4;
+	stroke-dasharray: 24 6;
+}
+
+/* The map scales down with the screen, so the line gets thin on phones: thicker line, longer dashes. */
+@media (max-width: 768px) {
+	.carte-avl__route path {
+		stroke-width: 10;
+		stroke-dasharray: 50 14;
+	}
+
+	/* Mask must stay wider than the visible line */
+	.carte-avl__routes .carte-avl__route-reveal {
+		stroke-width: 28;
+	}
 }
 
 .carte-avl__route.is-filtered-out {
