@@ -345,6 +345,20 @@
 	margin: 0.5rem 0;
 }
 
+.carte-avl__tooltip-body a {
+	color: var(--avl-blue);
+	font-weight: 600;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	word-break: break-word;
+}
+
+.carte-avl__tooltip-body a:hover,
+.carte-avl__tooltip-body a:focus {
+	color: #0d2244;
+	text-decoration: underline;
+}
+
 .carte-avl__tooltip-body .wp-block-embed,
 .carte-avl__tooltip-body .wp-video,
 .carte-avl__tooltip-body .embed-container,
