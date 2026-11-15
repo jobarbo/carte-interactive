@@ -215,12 +215,11 @@
 			if (!route) return;
 
 			g.dataset.d = route.full;
-			const done = g.querySelector(".carte-avl__route-line:not(.carte-avl__route-line--upcoming)");
-			const upcoming = g.querySelector(".carte-avl__route-line--upcoming");
-			[[done, route.done], [upcoming, route.upcoming]].forEach(function (pair) {
-				if (!pair[0]) return;
-				if (pair[1]) pair[0].setAttribute("d", pair[1]);
-				else pair[0].removeAttribute("d");
+			// Casing (border) + coloured line share the same d for each part.
+			g.querySelectorAll("path[data-part]").forEach(function (path) {
+				const d = route[path.getAttribute("data-part")];
+				if (d) path.setAttribute("d", d);
+				else path.removeAttribute("d");
 			});
 		});
 	}

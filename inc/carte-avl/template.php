@@ -132,13 +132,21 @@ $carte_avl_render_partner_flag = static function ($width = 26, $height = 42) {
 					<g
 						class="carte-avl__route"
 						data-edition="<?php echo esc_attr($route['edition']); ?>"
+						style="--route-color:<?php echo esc_attr($edition_colors[ $route['edition'] ] ?? '#706262'); ?>;"
 						data-stops="<?php echo esc_attr(wp_json_encode($stops)); ?>"
 						data-width="<?php echo (int) $cw; ?>"
 						data-height="<?php echo (int) $ch; ?>"
 						data-upcoming="<?php echo (int) $route['upcoming']; ?>"
 					>
-						<path class="carte-avl__route-line" />
-						<path class="carte-avl__route-line carte-avl__route-line--upcoming" />
+						<?php // Each part = navy casing (border) under the coloured dashes; d is set in JS. ?>
+						<g class="carte-avl__route-part">
+							<path class="carte-avl__route-casing" data-part="done" />
+							<path class="carte-avl__route-line" data-part="done" />
+						</g>
+						<g class="carte-avl__route-part carte-avl__route-part--upcoming">
+							<path class="carte-avl__route-casing" data-part="upcoming" />
+							<path class="carte-avl__route-line" data-part="upcoming" />
+						</g>
 					</g>
 				<?php endforeach; ?>
 			</svg>

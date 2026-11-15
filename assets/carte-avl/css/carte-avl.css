@@ -209,18 +209,35 @@
 }
 
 /* Matches the dashed paths in carte_SOURCES_final.psd (values in 1920px canvas units) */
+/* Colour = the cohort's colour (--route-color, set per route in template.php). */
 .carte-avl__route-line {
 	fill: none;
-	stroke: #706262;
+	stroke: var(--route-color, #706262);
 	stroke-width: 4;
 	stroke-linecap: butt;
 	stroke-linejoin: round;
 	stroke-dasharray: 24 6;
 }
 
-/* From the last reached event onward: the journey still in progress. */
-.carte-avl__route-line--upcoming {
-	opacity: 0.35;
+/*
+ * Border: a navy casing under each dash (same navy as the pins) so pale colours stay readable.
+ * Border B = 1.5 → width 4 + 2B, dashes 24 + 2B, gaps 6 − 2B, offset B: each casing dash
+ * sticks out B on every side of its coloured dash, ends included.
+ */
+.carte-avl__route-casing {
+	fill: none;
+	stroke: #1a3a6b;
+	stroke-width: 7;
+	stroke-linecap: butt;
+	stroke-linejoin: round;
+	stroke-dasharray: 27 3;
+	stroke-dashoffset: 1.5;
+}
+
+/* From the last reached event onward: the journey still in progress. Opacity on the group so
+   casing + line fade together instead of the border showing through the colour. */
+.carte-avl__route-part--upcoming {
+	opacity: 0.45;
 }
 
 /* The map scales down with the screen, so the line gets thin on phones: thicker line, longer dashes. */
@@ -228,6 +245,13 @@
 	.carte-avl__route-line {
 		stroke-width: 10;
 		stroke-dasharray: 50 14;
+	}
+
+	/* Border B = 3 (same formula as above) */
+	.carte-avl__route-casing {
+		stroke-width: 16;
+		stroke-dasharray: 56 8;
+		stroke-dashoffset: 3;
 	}
 
 	/* Mask must stay wider than the visible line */
