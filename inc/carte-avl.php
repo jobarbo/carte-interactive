@@ -218,6 +218,15 @@ function carte_avl_get_points() {
 		)
 	);
 
+	// Cohorts switched to "not visible" are hidden from the map entirely (pins + routes),
+	// not just from the filter and legend.
+	$hidden = array();
+	foreach (carte_avl_get_categories(false) as $cat) {
+		if (!$cat['visible']) {
+			$hidden[$cat['cle']] = true;
+		}
+	}
+
 	$points = array();
 	foreach ($query->posts as $post) {
 		$type    = function_exists('get_field') ? get_field('type', $post->ID) : get_post_meta($post->ID, 'type', true);
