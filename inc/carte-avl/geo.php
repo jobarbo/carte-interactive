@@ -200,7 +200,8 @@ add_action('admin_notices', function () {
 });
 
 /**
- * After ACF saves an avl_point: geocode postal if set, then project to x/y %.
+ * After ACF saves an avl_point: if it has never been placed, use the postal code
+ * for a first position (else the centre). A position already set is never overwritten.
  *
  * Priority 20 so ACF field values are already stored.
  *
@@ -223,18 +224,25 @@ add_action('acf/save_post', function ($post_id) {
 		return;
 	}
 
+	$save_xy = static function ($x, $y) use ($post_id) {
+		if (function_exists('update_field')) {
+			update_field('field_avl_point_x', $x, $post_id);
+			update_field('field_avl_point_y', $y, $post_id);
+		} else {
+			update_post_meta($post_id, 'x', $x);
+			update_post_meta($post_id, 'y', $y);
+		}
+	};
+
 	$postal_raw = function_exists('get_field') ? get_field('code_postal', $post_id) : get_post_meta($post_id, 'code_postal', true);
 	$postal_raw = is_string($postal_raw) ? trim($postal_raw) : '';
-	$lat       = function_exists('get_field') ? get_field('latitude', $post_id) : get_post_meta($post_id, 'latitude', true);
-	$lng       = function_exists('get_field') ? get_field('longitude', $post_id) : get_post_meta($post_id, 'longitude', true);
 
-	$coords = null;
-
+	$xy = null;
 	if ($postal_raw !== '') {
 		$normalized = carte_avl_normalize_postal($postal_raw);
 		if ($normalized === '') {
 			carte_avl_queue_admin_notice(
-				'Code postal invalide. Utilisez le format canadien A1A 1A1, ou saisissez latitude / longitude.',
+				'Code postal invalide (format attendu : A1A 1A1). Le point a été placé au centre : déplacez-le sur la carte.',
 				'error'
 			);
 		} else {
@@ -244,69 +252,24 @@ add_action('acf/save_post', function ($post_id) {
 				update_post_meta($post_id, 'code_postal', $normalized);
 			}
 			$coords = carte_avl_geocode_postal($normalized);
-			if ($coords === null) {
+			$xy     = $coords ? carte_avl_project_lat_lng($coords['lat'], $coords['lng']) : null;
+			if ($xy === null) {
 				carte_avl_queue_admin_notice(
-					'Impossible de géocoder le code postal « ' . $normalized . ' ». Vérifiez-le ou saisissez lat/lng manuellement.',
+					'Impossible de localiser le code postal « ' . $normalized . ' ». Le point a été placé au centre : déplacez-le sur la carte.',
 					'error'
 				);
-			} else {
-				$lat = $coords['lat'];
-				$lng = $coords['lng'];
-				if (function_exists('update_field')) {
-					update_field('field_avl_point_latitude', $lat, $post_id);
-					update_field('field_avl_point_longitude', $lng, $post_id);
-				} else {
-					update_post_meta($post_id, 'latitude', $lat);
-					update_post_meta($post_id, 'longitude', $lng);
-				}
 			}
 		}
 	}
 
-	if ($coords === null && is_numeric($lat) && is_numeric($lng)) {
-		$coords = array(
-			'lat' => (float) $lat,
-			'lng' => (float) $lng,
-		);
-	}
-
-	if ($coords === null) {
-		// Keep existing x/y; seed defaults only if missing.
-		$x = function_exists('get_field') ? get_field('x', $post_id) : get_post_meta($post_id, 'x', true);
-		$y = function_exists('get_field') ? get_field('y', $post_id) : get_post_meta($post_id, 'y', true);
-		if (!is_numeric($x) || !is_numeric($y)) {
-			if (function_exists('update_field')) {
-				update_field('field_avl_point_x', 50, $post_id);
-				update_field('field_avl_point_y', 50, $post_id);
-			} else {
-				update_post_meta($post_id, 'x', 50);
-				update_post_meta($post_id, 'y', 50);
-			}
-		}
-		return;
-	}
-
-	$xy = carte_avl_project_lat_lng($coords['lat'], $coords['lng']);
 	if ($xy === null) {
+		$save_xy(50, 50);
 		return;
 	}
 
-	if (function_exists('update_field')) {
-		update_field('field_avl_point_x', $xy['x'], $post_id);
-		update_field('field_avl_point_y', $xy['y'], $post_id);
-	} else {
-		update_post_meta($post_id, 'x', $xy['x']);
-		update_post_meta($post_id, 'y', $xy['y']);
-	}
-
+	$save_xy($xy['x'], $xy['y']);
 	carte_avl_queue_admin_notice(
-		sprintf(
-			'Position mise à jour : %.2f%% / %.2f%% (lat %.4f, lng %.4f).',
-			$xy['x'],
-			$xy['y'],
-			$coords['lat'],
-			$coords['lng']
-		),
+		sprintf('Position placée depuis le code postal : %.2f %% / %.2f %%. Ajustez-la sur la carte au besoin.', $xy['x'], $xy['y']),
 		'success'
 	);
 }, 20);

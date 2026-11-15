@@ -244,6 +244,9 @@ function carte_avl_get_points() {
 		if (is_array($terms) && !empty($terms) && !is_wp_error($terms)) {
 			$edition = $terms[0]->slug;
 		}
+		if (isset($hidden[$edition])) {
+			continue;
+		}
 
 		$points[] = array(
 			'id'      => (int) $post->ID,

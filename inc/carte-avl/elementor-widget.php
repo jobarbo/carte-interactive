@@ -38,7 +38,7 @@ class Carte_AVL_Elementor_Widget extends \Elementor\Widget_Base {
 
 		$this->add_control('info', array(
 			'type' => \Elementor\Controls_Manager::RAW_HTML,
-			'raw'  => '<p>Les points se gèrent dans <strong>Carte AVL</strong> (page d’options ACF). Ce widget affiche la carte illustrée et les marqueurs.</p>',
+			'raw'  => '<p>Les points se gèrent dans <strong>Points carte</strong> (menu de l’administration), les années dans <strong>Points carte → Cohortes</strong> et l’apparence dans <strong>Carte AVL</strong>. Ce widget affiche la carte illustrée et les marqueurs.</p>',
 		));
 
 		$this->end_controls_section();
@@ -52,7 +52,7 @@ class Carte_AVL_Elementor_Widget extends \Elementor\Widget_Base {
 		?>
 		<div style="padding:2rem;background:#F4DDD2;border:2px dashed #1a3a6b;text-align:center;">
 			<strong>Carte Avez-vous lu</strong><br>
-			<small>Aperçu côté front uniquement — points via ACF Options</small>
+			<small>Aperçu côté front uniquement — points via « Points carte »</small>
 		</div>
 		<?php
 	}
